@@ -1,0 +1,14 @@
+# Local generated docs
+structure.txt
+descriptions.txt
+
+# Xcode
+DerivedData/
+*.xcuserdata/
+*.xcuserdatad/
+
+# Swift Package Manager
+.build/
+
+# macOS
+.DS_Store
