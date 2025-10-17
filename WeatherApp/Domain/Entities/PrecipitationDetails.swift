@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct PrecipitationDetails: Sendable {
+    let precipLast24hMm: Double
+    let summary: String
+}

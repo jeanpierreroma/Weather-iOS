@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct HumidityDetails: Sendable {
+    let humidityPercent: Int
+    let summary: String
+}

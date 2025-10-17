@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct ScaleBarStyle {
+    let barHeight: CGFloat
+    let cornerRadius: CGFloat
+}

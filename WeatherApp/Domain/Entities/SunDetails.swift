@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct SunDetails {
+    let sunrise: Date
+    let sunset: Date
+}

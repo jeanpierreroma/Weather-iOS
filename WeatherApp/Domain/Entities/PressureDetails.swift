@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct PressureDetails {
+    let pressureHpa: Int
+    let summary: String
+}

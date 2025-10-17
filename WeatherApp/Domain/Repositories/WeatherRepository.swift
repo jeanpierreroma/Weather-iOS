@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+protocol WeatherRepository {
+    func fetchWetherDetails() async
+}

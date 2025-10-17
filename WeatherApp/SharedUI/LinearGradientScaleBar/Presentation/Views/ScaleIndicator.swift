@@ -8,11 +8,17 @@
 import SwiftUI
 
 struct ScaleIndicator: View {
+    let style: ScaleIndicatorStyle
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Circle()
+            .fill(style.color)
+            .frame(width: style.diameter, height: style.diameter)
+            .shadow(color: style.color.opacity(style.shadowOpacity),
+                    radius: style.shadowRadius)
     }
 }
 
 #Preview {
-    ScaleIndicator()
+    ScaleIndicator(style: .init(color: .white, diameter: 12, shadowRadius: 2, shadowOpacity: 0.5))
 }

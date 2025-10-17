@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct VisibilityDetails: Sendable {
+    let visibilityKm: Double
+    let summary: String
+}

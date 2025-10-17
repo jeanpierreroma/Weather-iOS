@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+public struct WindDetails {
+    let windSpeedMps: Double
+    let gustSpeedMps: Double
+    let directionDegrees: Double
+}

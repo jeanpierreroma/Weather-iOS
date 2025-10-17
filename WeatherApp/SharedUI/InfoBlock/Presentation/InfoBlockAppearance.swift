@@ -11,7 +11,7 @@ import SwiftUI
 struct InfoBlockAppearance: Sendable {
     var cornerRadius: CGFloat = 14
     var contentPadding: CGFloat = 16
-    var fixedHeight: CGFloat = 150
+    var fixedHeight: CGFloat = 160
     
     // Border
     var showsBorder: Bool = true

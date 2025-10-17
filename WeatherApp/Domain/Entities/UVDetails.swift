@@ -12,7 +12,11 @@ struct UVDetails {
     let standard: UVStandard
     let summary: String
     
-    
+    init(index: Int, summary: String) {
+        self.index = index.clamped(to: 0...11)
+        self.standard = UVStandard.from(index: index)
+        self.summary = summary
+    }
 }
 
 enum UVStandard: CaseIterable, Sendable {

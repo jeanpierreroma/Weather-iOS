@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct FeelsLikeDetails {
+    let temperature: Int
+    let summary: String
+}

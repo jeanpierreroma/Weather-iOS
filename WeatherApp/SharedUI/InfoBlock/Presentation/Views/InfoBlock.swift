@@ -30,43 +30,21 @@ struct InfoBlock<Content: InfoBlockContent>: View {
             
             content
             
-            Spacer(minLength: 0)
         }
         .padding(appearance.contentPadding)
         .frame(
             maxWidth: .infinity,
             minHeight: appearance.fixedHeight,
-            maxHeight: appearance.fixedHeight,
+            maxHeight: appearance.fixedHeight + appearance.contentPadding / 2,
             alignment: .topLeading
         )
-        .glassEffect(.regular, in: cardShape)
+        .background(.ultraThinMaterial, in: cardShape)
+        .clipShape(cardShape)
         .overlay {
             if appearance.showsBorder {
                 cardShape.stroke(resolvedBorderColor, lineWidth: appearance.borderLineWidth)
             }
         }
+        .contentShape(cardShape)
     }
-}
-
-#Preview {
-    ZStack {
-        LinearGradient(
-            colors: [.indigo, .purple],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-        .saturation(1.2)
-        .brightness(-0.05)
-        .ignoresSafeArea()
-
-        GlassEffectContainer {
-            VStack(spacing: 16) {
-                InfoBlock(header: "Calories", headerIconSystemName: "flame.fill")
-                InfoBlock(header: "Protein", headerIconSystemName: "bolt.fill")
-                InfoBlock(header: "Water", headerIconSystemName: "drop.fill")
-            }
-        }
-        .padding()
-    }
-    .preferredColorScheme(.dark)
 }

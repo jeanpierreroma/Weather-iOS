@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+struct SunSamplePoint: Identifiable {
+    let id = UUID()
+    let date: Date
+    let elevationDegrees: Double
+    var fractionOfDay: Double // 0...1
+}

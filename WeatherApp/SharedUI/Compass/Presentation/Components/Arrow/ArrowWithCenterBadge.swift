@@ -1,3 +1,11 @@
+//
+//  ArrowWithCenterBadge.swift
+//  WeatherApp
+//
+//  Created by Oleksandr Melnechenko on 14.10.2025.
+//
+
+
 import SwiftUI
 
 struct ArrowWithCenterBadge<CenterContent: View>: View {
@@ -6,7 +14,6 @@ struct ArrowWithCenterBadge<CenterContent: View>: View {
     
     // Орієнтація
     let directionDegrees: Double
-    var arrowShowsSourceDirection: Bool = true
 
     // Центр-бейдж
     let centerBadgeDiameter: CGFloat
@@ -29,7 +36,6 @@ struct ArrowWithCenterBadge<CenterContent: View>: View {
 
     init(
         directionDegrees: Double,
-        arrowShowsSourceDirection: Bool,
         centerBadgeDiameter: CGFloat,
         gapBetweenBadgeAndArrow: CGFloat,
         shaftWidth: CGFloat,
@@ -41,7 +47,6 @@ struct ArrowWithCenterBadge<CenterContent: View>: View {
         @ViewBuilder centerContent: @escaping () -> CenterContent
     ) {
         self.directionDegrees = directionDegrees
-        self.arrowShowsSourceDirection = arrowShowsSourceDirection
         self.centerBadgeDiameter = centerBadgeDiameter
         self.gapBetweenBadgeAndArrow = gapBetweenBadgeAndArrow
         self.shaftWidth = 4
@@ -51,10 +56,6 @@ struct ArrowWithCenterBadge<CenterContent: View>: View {
         self.arrowStroke = arrowStroke
         self.arrowStrokeLineWidth = arrowStrokeLineWidth
         self.centerContent = centerContent
-    }
-
-    private var effectiveRotationDegrees: Double {
-        arrowShowsSourceDirection ? directionDegrees : (directionDegrees + 180).truncatingRemainder(dividingBy: 360)
     }
 
     var body: some View {
@@ -74,7 +75,7 @@ struct ArrowWithCenterBadge<CenterContent: View>: View {
                     headWidth: headWidth
                 )
                 .fill(arrowFill)
-                .rotationEffect(.degrees(effectiveRotationDegrees))
+                .rotationEffect(.degrees(directionDegrees))
                 
                 centerContent()
                     .frame(width: centerBadgeDiameter, height: centerBadgeDiameter)
