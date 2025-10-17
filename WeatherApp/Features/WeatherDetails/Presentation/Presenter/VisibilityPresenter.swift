@@ -1,0 +1,17 @@
+//
+//  VisibilityPresenter.swift
+//  WeatherApp
+//
+//  Created by Oleksandr Melnechenko on 17.10.2025.
+//
+
+import SwiftUI
+
+enum VisibilityPresenter {
+    static func props(from details: VisibilityDetails) -> VisibilityProps {
+        VisibilityProps(
+            valueText: "\(details.visibilityKm) km",
+            summaryText: details.summary
+        )
+    }
+}
