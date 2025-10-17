@@ -7,12 +7,41 @@
 
 import SwiftUI
 
-struct HumidityInfoContent: View {
+struct HumidityInfoContent: InfoBlockContent {
+    var header = "Humidity"
+    var headerIconSystemName = "humidity.fill"
+    
+    let props: HumidityProps
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(alignment: .leading) {
+            Text(props.valueText)
+                .metricValueStyle()
+            
+            Spacer()
+            
+            Text(props.summaryText)
+                .metricCaptionStyle()
+        }
     }
 }
 
 #Preview {
-    HumidityInfoContent()
+    ZStack {
+        LinearGradient(
+            colors: [.indigo, .purple, .pink],
+            startPoint: .topLeading, endPoint: .bottomTrailing
+        )
+        .ignoresSafeArea()
+        
+        InfoBlock(
+            content: HumidityInfoContent(
+                props: .init(
+                    valueText: "89",
+                    summaryText: "The dew point is 20° right now."
+                )
+            )
+        )
+        .padding()
+    }
 }

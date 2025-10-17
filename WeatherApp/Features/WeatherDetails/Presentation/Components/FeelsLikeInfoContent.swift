@@ -7,12 +7,46 @@
 
 import SwiftUI
 
-struct FeelsLikeInfoContent: View {
+struct FeelsLikeInfoContent: InfoBlockContent {
+    var header = "Feels like"
+    var headerIconSystemName = "thermometer.medium"
+    
+    let props: FeelsLikeProps
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(alignment: .leading) {
+            Text(props.temperatureText)
+                .metricValueStyle()
+
+            Spacer()
+            
+            Text(props.summary)
+                .metricCaptionStyle()
+        }
     }
 }
 
 #Preview {
-    FeelsLikeInfoContent()
+    ZStack {
+        LinearGradient(
+            colors: [.indigo, .purple, .pink],
+            startPoint: .topLeading, endPoint: .bottomTrailing
+        )
+        .ignoresSafeArea()
+        
+        InfoBlock(
+            content: FeelsLikeInfoContent(
+                props: .init(
+                    temperatureText: "21",
+                    summary: "Similar to the actual temperature."
+                )
+            )
+        )
+            .padding()
+    }
+}
+
+enum TemperatureDisplayUnit: String, CaseIterable, Sendable {
+    case celsius, fahrenheit
+    var suffix: String { self == .celsius ? "C" : "F" }
 }

@@ -7,12 +7,48 @@
 
 import SwiftUI
 
-struct PrecipitationInfoContent: View {
+struct PrecipitationInfoContent: InfoBlockContent {
+    var header = "Precipitation"
+    var headerIconSystemName = "drop.fill"
+    
+    let props: PrecipitationProps
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 0) {
+                Text(props.valueText)
+                    .metricValueStyle()
+                
+                Text(props.periodTitle)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+            }
+            
+            Spacer()
+            
+            Text(props.summaryText)
+                .metricCaptionStyle()
+        }
     }
 }
 
 #Preview {
-    PrecipitationInfoContent()
+    ZStack {
+        LinearGradient(
+            colors: [.indigo, .purple, .pink],
+            startPoint: .topLeading, endPoint: .bottomTrailing
+        )
+        .ignoresSafeArea()
+        
+        InfoBlock(
+            content: PrecipitationInfoContent(
+                props: .init(
+                    valueText: "5",
+                    periodTitle: "in last 24h",
+                    summaryText: "<1 mm expected in next 24h"
+                )
+            )
+        )
+        .padding()
+    }
 }
