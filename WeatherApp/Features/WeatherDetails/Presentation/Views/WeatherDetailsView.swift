@@ -13,67 +13,82 @@ struct WeatherDetailsView: View {
     @Environment(\.calendar) private var calendar
     @Environment(\.locale)   private var locale
 
-    @State private var vm = WeatherDetailsViewModel()
+    @State var viewModel: WeatherDetailsViewModel
     
     var body: some View {
-        ZStack {
-            LinearGradient(
-                colors: [.indigo, .purple, .pink],
-                startPoint: .topLeading, endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
-
-            ScrollView(.vertical, showsIndicators: true) {
-                LazyVStack(spacing: 16) {
-                    if let details = vm.details {
-                        let airQualityProps = AirQualityPresenter.props(from: details.aqi)
-                        InfoBlock(content: AirQualityInfoContent(props: airQualityProps))
-
-                        let feelsProp = FeelsLikePresenter.props(from: details.feelsLike, unit: temperatureUnit)
-                        let uvProps = UVPresenter.props(from: details.uvDetails)
-                        
-                        HStack(spacing: 16) {
-                            InfoBlock(content: FeelsLikeInfoContent(props: feelsProp))
-                                .frame(maxWidth: .infinity)
-                            InfoBlock(content: UVIndexInfoContent(props: uvProps))
-                                .frame(maxWidth: .infinity)
-                        }
-                        
-                        let windProps = WindPresenter.props(from: details.windDetails, unit: windSpeedUnit)
-                        
-                        InfoBlock(content: WindInfoContent(props: windProps))
-
-                        let sunProps = SunPresenter.props(from: details.sunDetails, now: Date(), calendar: calendar, locale: locale)
-                        let precipProps = PrecipitationPresenter.props(from: details.precipitationDetails)
-                        HStack(spacing: 16) {
-                            InfoBlock(content: SunsetInfoContent(props: sunProps))
-                                .frame(maxWidth: .infinity)
-
-                            InfoBlock(content: PrecipitationInfoContent(props: precipProps))
-                                .frame(maxWidth: .infinity)
-                        }
-
-                        let visProps = VisibilityPresenter.props(from: details.visibilityDetails)
-                        let humidityProps = HumidityPresenter.props(from: details.humidityDetails)
-                        HStack(spacing: 16) {
-                            InfoBlock(content: VisibilityInfoContent(props: visProps))
-                                .frame(maxWidth: .infinity)
-                            InfoBlock(content: HumidityInfoContent(props: humidityProps))
-                                .frame(maxWidth: .infinity)
-                        }
-                    } else {
-                        ProgressView()
-                    }
+        LazyVStack(spacing: 16) {
+            if let details = viewModel.details {
+                let airQualityProps = AirQualityPresenter.props(from: details.aqi)
+                InfoBlock(content: AirQualityInfoContent(props: airQualityProps))
+                
+                let feelsProp = FeelsLikePresenter.props(from: details.feelsLike, unit: temperatureUnit)
+                let uvProps = UVPresenter.props(from: details.uvDetails)
+                
+                HStack(spacing: 16) {
+                    InfoBlock(content: FeelsLikeInfoContent(props: feelsProp))
+                        .frame(maxWidth: .infinity)
+                    InfoBlock(content: UVIndexInfoContent(props: uvProps))
+                        .frame(maxWidth: .infinity)
                 }
-                .padding()
+                
+                let windProps = WindPresenter.props(from: details.windDetails, unit: windSpeedUnit)
+                
+                InfoBlock(content: WindInfoContent(props: windProps))
+                
+                let sunProps = SunPresenter.props(from: details.sunDetails, now: Date(), calendar: calendar, locale: locale)
+                let precipProps = PrecipitationPresenter.props(from: details.precipitationDetails)
+                HStack(spacing: 16) {
+                    InfoBlock(content: SunsetInfoContent(props: sunProps))
+                        .frame(maxWidth: .infinity)
+                    
+                    InfoBlock(content: PrecipitationInfoContent(props: precipProps))
+                        .frame(maxWidth: .infinity)
+                }
+                
+                let visProps = VisibilityPresenter.props(from: details.visibilityDetails)
+                let humidityProps = HumidityPresenter.props(from: details.humidityDetails)
+                HStack(spacing: 16) {
+                    InfoBlock(content: VisibilityInfoContent(props: visProps))
+                        .frame(maxWidth: .infinity)
+                    InfoBlock(content: HumidityInfoContent(props: humidityProps))
+                        .frame(maxWidth: .infinity)
+                }
+            } else {
+                ProgressView()
             }
         }
         .task {
-            await vm.loadData()
+            await viewModel.loadData()
         }
     }
 }
 
 #Preview {
-    WeatherDetailsView()
+    let viewModel = WeatherDetailsViewModel(
+        fetchDailyForecastUseCase: FetchDailyForecast(
+            repository: WeatherRepositoryImpl(
+                api: WeatherForecastApiImpl(
+                    http: HTTPClient(
+                        config: APIConfig(
+                            baseURL: AppConfig.dev.apiBaseURL,
+                            enableLogs: AppConfig.dev.enableNetworkLogs
+                        )
+                    )
+                )
+            )
+        )
+    )
+    
+    ZStack {
+        LinearGradient(
+            colors: [.indigo, .purple, .pink],
+            startPoint: .topLeading, endPoint: .bottomTrailing
+        )
+        .ignoresSafeArea()
+        
+        ScrollView(.vertical, showsIndicators: true) {
+            WeatherDetailsView(viewModel: viewModel)
+                .padding()
+        }
+    }
 }

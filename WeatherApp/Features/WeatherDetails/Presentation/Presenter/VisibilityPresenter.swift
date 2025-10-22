@@ -10,7 +10,7 @@ import SwiftUI
 enum VisibilityPresenter {
     static func props(from details: VisibilityDetails) -> VisibilityProps {
         let km = Int(details.visibilityKm.rounded())
-        VisibilityProps(
+        return VisibilityProps(
             valueText: "\(km) km",
             summaryText: details.summary
         )

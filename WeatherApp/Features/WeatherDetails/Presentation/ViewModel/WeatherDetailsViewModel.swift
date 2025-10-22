@@ -6,18 +6,28 @@
 //
 
 import Foundation
+import Observation
 
-@Observable
 @MainActor
+@Observable
 final class WeatherDetailsViewModel {
     private(set) var details: WeatherDetails?
+    private let fetchDailyForecastUseCase: FetchDailyForecast
     
-    func loadData() async {
-        details = makeMockData()
+    init(fetchDailyForecastUseCase: FetchDailyForecast) {
+        self.fetchDailyForecastUseCase = fetchDailyForecastUseCase
     }
     
-    func makeAirQualityProp() -> AirQualityProps {
-        AirQualityPresenter.props(from: details!.aqi)
+    func loadData() async {
+//        switch await fetchDailyForecastUseCase.callAsFunction() {
+//        case .success(let details):
+////            self.details = details
+//            self.details = makeMockData()
+//        case .failure(let failure):
+//            print(failure.message)
+//        }
+        
+        self.details = makeMockData()
     }
     
     private func makeMockData() -> WeatherDetails {
