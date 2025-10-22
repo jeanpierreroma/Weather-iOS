@@ -22,7 +22,6 @@ struct LinearGradientScaleBar: View {
             let stops = gradientStops(totalRange: totalRange, colorStops: colorStops)
 
             ZStack {
-                // Бар із градієнтом
                 RoundedRectangle(cornerRadius: barStyle.cornerRadius, style: .continuous)
                     .fill(
                         LinearGradient(
