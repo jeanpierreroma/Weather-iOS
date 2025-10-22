@@ -9,18 +9,19 @@ import SwiftUI
 
 @main
 struct WeatherApp: App {
-//    let viewModel = ForecastViewModel()
     @State private var temperatureUnit = TemperatureDisplayUnit.celsius
     @State private var pressureUnit = PressureDisplayUnit.hPa
     @State private var windSpeedUnit = UnitSpeed.metersPerSecond
+        
+    @State private var container = AppContainer(config: .dev)
     
     var body: some Scene {
         WindowGroup {
-//            ForecastView(viewModel: viewModel)
-            WeatherDetailsView()
+            RootView()
                 .environment(\.temperatureUnit, temperatureUnit)
                 .environment(\.pressureUnit, pressureUnit)
                 .environment(\.windSpeedUnit, windSpeedUnit)
+                .environment(\.appContainer, container)
         }
     }
 }
