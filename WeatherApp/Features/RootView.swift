@@ -15,7 +15,7 @@ struct RootView: View {
     let hourly = (0..<12).map { i in
         HourForecastPoint(
             date: Calendar.current.date(byAdding: .hour, value: i, to: .now)!,
-            celsius: 12 + i/2,
+            celsius: Double(12 + i/2),
             symbol: ["cloud.sun", "cloud.rain", "sun.max"].randomElement()!
         )
     }
@@ -23,8 +23,8 @@ struct RootView: View {
     let daily: [DailyForecastPoint] = (0..<7).map { i in
         let date = Calendar.current.date(byAdding: .day, value: i, to: Calendar.current.startOfDay(for: .now))!
 
-        let low  = -3 + i
-        let high = low + Int.random(in: 2...12)
+        let low  = Double(-3 + i)
+        let high = Double(low + Double.random(in: 2...12))
 
         return DailyForecastPoint(
             date: date,
@@ -40,8 +40,7 @@ struct RootView: View {
                 WeatherOverviewView(
                     hourly: hourly,
                     daily: daily,
-                    detailsVM: container.viewModelFactory.makeWeatherDetailsVM(),
-                    vm: WeatherOverviewViewModel(hourly: hourly)
+                    vm: container.viewModelFactory.makeWeatherOverviewViewModel()
                 )
             }
             

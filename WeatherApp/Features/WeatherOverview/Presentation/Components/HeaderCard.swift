@@ -62,11 +62,11 @@ private struct HeaderCardContent: View {
     }
     
     var expandedOpacity: CGFloat {
-        min(progress / 0.35, 1)
+        min(progress / 0.25, 1)
     }
     
     var collapsedOpacity: CGFloat {
-        max(progress - 0.35, 0) / 0.65
+        max(progress - 0.25, 0) / 0.75
     }
     
     var collapsedScale: CGFloat {

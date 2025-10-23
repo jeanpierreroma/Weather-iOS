@@ -30,7 +30,6 @@ struct WeatherOverviewView: View {
     let hourly: [HourForecastPoint]
     let daily: [DailyForecastPoint]
 
-    @State var detailsVM: WeatherDetailsViewModel
     @State var vm: WeatherOverviewViewModel
     
     @State private var scrollOffset: CGFloat = 0
@@ -173,7 +172,7 @@ struct WeatherOverviewView: View {
     let hourly = (0..<12).map { i in
         HourForecastPoint(
             date: Calendar.current.date(byAdding: .hour, value: i, to: .now)!,
-            celsius: 12 + i/2,
+            celsius: Double(12 + i/2),
             symbol: ["cloud.sun", "cloud.rain", "sun.max"].randomElement()!
         )
     }
@@ -183,8 +182,8 @@ struct WeatherOverviewView: View {
     let daily: [DailyForecastPoint] = (0..<7).map { i in
         let date = cal.date(byAdding: .day, value: i, to: today)!
 
-        let low  = -3 + i
-        let high = low + Int.random(in: 2...12)
+        let low  = Double(-3 + i)
+        let high = Double(low + Double.random(in: 2...12))
 
         return DailyForecastPoint(
             date: date,
@@ -194,7 +193,8 @@ struct WeatherOverviewView: View {
         )
     }
     
-    let viewModel = WeatherDetailsViewModel(
+    let vm = WeatherOverviewViewModel(
+        hourly: hourly,
         fetchDailyForecastUseCase: FetchDailyForecast(
             repository: WeatherRepositoryImpl(
                 api: WeatherForecastApiImpl(
@@ -209,12 +209,9 @@ struct WeatherOverviewView: View {
         )
     )
     
-    let vm = WeatherOverviewViewModel(hourly: hourly)
-    
     WeatherOverviewView(
         hourly: hourly,
         daily: daily,
-        detailsVM: viewModel,
         vm: vm,
     )
 }
