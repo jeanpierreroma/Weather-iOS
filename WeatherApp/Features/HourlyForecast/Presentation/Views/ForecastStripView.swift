@@ -40,7 +40,7 @@ struct ForecastStripView: InfoBlockContent {
 struct HourForecastPoint: Identifiable, Equatable {
     let id = UUID()
     let date: Date
-    let celsius: Int
+    let celsius: Double
     let symbol: String
 }
 
@@ -49,7 +49,7 @@ struct HourForecastPoint: Identifiable, Equatable {
         content: ForecastStripView(
             hourly: (0..<12).map { i in
                 .init(date: Calendar.current.date(byAdding: .hour, value: i, to: .now)!,
-                      celsius: 12 + i/2,
+                      celsius: Double(12 + i/2),
                       symbol: ["cloud.sun", "cloud.rain", "sun.max"].randomElement()!)
             }
         )

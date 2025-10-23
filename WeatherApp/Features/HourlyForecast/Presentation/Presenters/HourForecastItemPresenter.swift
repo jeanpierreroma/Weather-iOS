@@ -10,7 +10,7 @@ import Foundation
 enum HourForecastItemPresenter {
     static func props(
         date: Date,
-        celsius: Int,
+        celsius: Double,
         symbol: String,
         tempUnit: TemperatureDisplayUnit,
         calendar: Calendar,

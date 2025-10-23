@@ -10,8 +10,8 @@ import Foundation
 enum DaysForecastItemPresenter {
     static func props(
         date: Date,
-        lowestCelsius: Int,
-        highestCelsius: Int,
+        lowestCelsius: Double,
+        highestCelsius: Double,
         symbol: String,
         tempUnit: TemperatureDisplayUnit,
         calendar: Calendar,

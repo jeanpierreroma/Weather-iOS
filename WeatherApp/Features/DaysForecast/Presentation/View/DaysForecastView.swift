@@ -40,8 +40,8 @@ struct DaysForecastView: InfoBlockContent {
 struct DailyForecastPoint: Identifiable, Equatable {
     let id = UUID()
     let date: Date
-    let lowestCelsius: Int
-    let highestCelsius: Int
+    let lowestCelsius: Double
+    let highestCelsius: Double
     let symbol: String
 }
 
@@ -51,8 +51,8 @@ struct DailyForecastPoint: Identifiable, Equatable {
     let daily: [DailyForecastPoint] = (0..<7).map { i in
         let date = cal.date(byAdding: .day, value: i, to: today)!
 
-        let low  = -3 + i
-        let high = low + Int.random(in: 2...12)
+        let low  = Double(-3 + i)
+        let high = Double(low + Double.random(in: 2...12))
 
         return DailyForecastPoint(
             date: date,

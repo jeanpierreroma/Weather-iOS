@@ -10,15 +10,15 @@ import Foundation
 enum HeaderCardPresenter {
     static func props(
         city: String,
-        currentTemperature: Int,
+        currentTemperature: Double,
         additioanlInformation: String,
-        highestTemperature: Int,
-        lowestTemperature: Int,
+        highestTemperature: Double,
+        lowestTemperature: Double,
         tempUnit: TemperatureDisplayUnit
     ) -> HeaderCardProps {
-        let currentTemperatureFormatted  = TemperatureFormatter.format(celsius: currentTemperature, to: tempUnit)
-        let highestTemperatureFormatted  = TemperatureFormatter.format(celsius: highestTemperature, to: tempUnit)
-        let lowestTemperatureFormatted  = TemperatureFormatter.format(celsius: lowestTemperature, to: tempUnit)
+        let currentTemperatureFormatted = TemperatureFormatter.format(celsius: currentTemperature, to: tempUnit)
+        let highestTemperatureFormatted = TemperatureFormatter.format(celsius: highestTemperature, to: tempUnit)
+        let lowestTemperatureFormatted = TemperatureFormatter.format(celsius: lowestTemperature, to: tempUnit)
         
         return HeaderCardProps(
             cityName: city,
