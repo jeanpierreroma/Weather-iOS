@@ -22,7 +22,7 @@ enum UVPresenter {
         .init(
             valueText: "\(details.index)",
             valueNumber: Double(details.index),
-            categoryTitle: details.standard.title,
+            categoryTitle: details.standard,
             summary: details.summary,
             colorStops: defaultStops
         )

@@ -32,9 +32,9 @@ final class WeatherDetailsViewModel {
     
     private func makeMockData() -> WeatherDetails {
         .init(
-            aqi: .init(index: 50, summary: "Air quality index is \(50), which is similar to yesterday at about this time."),
+            aqi: .init(index: 50, standard: "Good", summary: "Air quality index is \(50), which is similar to yesterday at about this time."),
             feelsLike: .init(temperature: 21, summary: "Similar to the actual temperature."),
-            uvDetails: .init(index: 0, summary: ""),
+            uvDetails: .init(index: 0, standard: "Low", summary: ""),
             windDetails: .init(windSpeedMps: 18, gustSpeedMps: 6, directionDegrees: 315),
             sunDetails: .init(
                 sunrise: Calendar.current.date(bySettingHour: 6, minute: 0, second: 0, of: .now)!,

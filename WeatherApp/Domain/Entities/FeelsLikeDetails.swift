@@ -8,6 +8,6 @@
 import Foundation
 
 struct FeelsLikeDetails {
-    let temperature: Int
+    let temperature: Double
     let summary: String
 }
