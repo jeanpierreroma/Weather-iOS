@@ -1,3 +1,11 @@
+//
+//  WeatherDataFooter.swift
+//  WeatherApp
+//
+//  Created by Oleksandr Melnechenko on 23.10.2025.
+//
+
+
 import SwiftUI
 
 struct WeatherDataFooter: View {

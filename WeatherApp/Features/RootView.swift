@@ -27,7 +27,7 @@ struct RootView: View {
     }
         
     var body: some View {
-        ZStack {
+        TabView {
             ForEach(0..<2, id: \.self) { _ in
                 WeatherOverviewView(
                     daily: daily,
@@ -35,5 +35,11 @@ struct RootView: View {
                 )
             }
         }
+        .tabViewStyle(.page)
+        .ignoresSafeArea()
     }
+}
+
+#Preview {
+    RootView()
 }

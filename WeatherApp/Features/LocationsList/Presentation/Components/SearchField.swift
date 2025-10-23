@@ -1,3 +1,11 @@
+//
+//  SearchField.swift
+//  WeatherApp
+//
+//  Created by Oleksandr Melnechenko on 23.10.2025.
+//
+
+
 import SwiftUI
 
 struct SearchField: View {
@@ -16,4 +24,11 @@ struct SearchField: View {
         .padding(.horizontal, 12)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
+}
+
+#Preview {
+    @Previewable @State var query = ""
+    
+    SearchField(text: $query, placeholder: "Search for a city or airport")
+        .padding()
 }
