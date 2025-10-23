@@ -8,5 +8,5 @@
 import Foundation
 
 protocol WeatherForecastApi {
-    func fetchWeatherForecast(latitude: Double, longitude: Double) async -> Result<WeatherDataDto, NetworkFailure>
+    func fetchWeatherForecast(latitude: Double, longitude: Double) async -> Result<DailyForecastDto, NetworkFailure>
 }

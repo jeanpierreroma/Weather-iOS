@@ -14,8 +14,8 @@ final class WeatherRepositoryImpl: WeatherRepository {
         self.api = api
     }
     
-    func fetchWetherDetails() async -> Result<WeatherDataDto, RepositoryFailure> {
-        (await api.fetchWeatherForecast(latitude: 52.52, longitude: 13.41)).mapNetworkFailure()
+    func fetchWetherDetails(latitude: Double, longitude: Double) async -> Result<DailyForecastDto, RepositoryFailure> {
+        (await api.fetchWeatherForecast(latitude: latitude, longitude: longitude)).mapNetworkFailure()
     }
 }
 
