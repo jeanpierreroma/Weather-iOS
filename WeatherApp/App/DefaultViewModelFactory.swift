@@ -18,14 +18,8 @@ final class DefaultViewModelFactory: ViewModelFactory {
     
     @MainActor
     func makeWeatherOverviewViewModel() -> WeatherOverviewViewModel {
-        let hourly = (0..<12).map { i in
-            HourForecastPoint(
-                date: Calendar.current.date(byAdding: .hour, value: i, to: .now)!,
-                celsius: Double(12 + i/2),
-                symbol: ["cloud.sun", "cloud.rain", "sun.max"].randomElement()!
-            )
-        }
-        
-        return WeatherOverviewViewModel(hourly: hourly, fetchDailyForecastUseCase: fetchDailyForecastUseCase)
+        WeatherOverviewViewModel(
+            fetchDailyForecastUseCase: fetchDailyForecastUseCase
+        )
     }
 }

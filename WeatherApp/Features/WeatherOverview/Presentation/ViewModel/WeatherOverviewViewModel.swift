@@ -11,26 +11,29 @@ import UIKit
 @MainActor
 @Observable
 final class WeatherOverviewViewModel {
-    var hourly: [HourForecastPoint]
+    private(set) var hourly: [HourForecastPoint]?
     private(set) var details: WeatherDetails?
+    
     private let fetchDailyForecastUseCase: FetchDailyForecast
 
-    init(hourly: [HourForecastPoint], fetchDailyForecastUseCase: FetchDailyForecast) {
-        self.hourly = hourly
+    init(fetchDailyForecastUseCase: FetchDailyForecast) {
         self.fetchDailyForecastUseCase = fetchDailyForecastUseCase
     }
     
     func loadData() async {
-        switch await fetchDailyForecastUseCase.callAsFunction(latitude: 49.8383, longitude: 24.0232) {
-        case .success(let details):
-            self.details = details
-//            self.details = makeMockData()
-        case .failure(let failure):
-            print(failure.message)
-        }
+//        switch await fetchDailyForecastUseCase.callAsFunction(latitude: 49.8383, longitude: 24.0232) {
+//        case .success(let details):
+//            self.details = details
+//            
+//        case .failure(let failure):
+//            print(failure.message)
+//        }
+        
+        self.details = makeMockWeatherDetails()
+        self.hourly = makeMockHourlyForecastPoints()
     }
     
-    private func makeMockData() -> WeatherDetails {
+    private func makeMockWeatherDetails() -> WeatherDetails {
         .init(
             aqi: .init(index: 50, standard: "Good", summary: "Air quality index is \(50), which is similar to yesterday at about this time."),
             feelsLike: .init(temperature: 21, summary: "Similar to the actual temperature."),
@@ -45,5 +48,15 @@ final class WeatherOverviewViewModel {
             humidityDetails: .init(humidityPercent: 89, summary: "The dew point is 20° right now."),
             pressureDetails: .init(pressureHpa: 1024, summary: "")
         )
+    }
+    
+    private func makeMockHourlyForecastPoints() -> [HourForecastPoint] {
+        return (0..<12).map { i in
+            HourForecastPoint(
+                date: Calendar.current.date(byAdding: .hour, value: i, to: .now)!,
+                temperature: Double(12 + i/2),
+                symbol: ["cloud.sun", "cloud.rain", "sun.max"].randomElement()!
+            )
+        }
     }
 }

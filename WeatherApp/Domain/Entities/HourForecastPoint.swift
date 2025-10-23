@@ -1,8 +1,16 @@
-import SwiftUI
+//
+//  HourForecastPoint.swift
+//  WeatherApp
+//
+//  Created by Oleksandr Melnechenko on 23.10.2025.
+//
 
-struct HourForecastPoint: Identifiable, Equatable {
-    let id = UUID()
+import Foundation
+
+struct HourForecastPoint: Identifiable {
+    var id: Date { date }
+    
     let date: Date
-    let celsius: Double
+    let temperature: Double
     let symbol: String
 }

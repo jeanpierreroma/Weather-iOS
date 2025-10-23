@@ -23,7 +23,7 @@ struct ForecastStripView: InfoBlockContent {
                 ForEach(hourly) { p in
                     let props = HourForecastItemPresenter.props(
                         date: p.date,
-                        celsius: p.celsius,
+                        celsius: p.temperature,
                         symbol: p.symbol,
                         tempUnit: tempUnit,
                         calendar: calendar,
@@ -37,20 +37,17 @@ struct ForecastStripView: InfoBlockContent {
     }
 }
 
-struct HourForecastPoint: Identifiable, Equatable {
-    let id = UUID()
-    let date: Date
-    let celsius: Double
-    let symbol: String
-}
+
 
 #Preview {
     InfoBlock(
         content: ForecastStripView(
             hourly: (0..<12).map { i in
-                .init(date: Calendar.current.date(byAdding: .hour, value: i, to: .now)!,
-                      celsius: Double(12 + i/2),
-                      symbol: ["cloud.sun", "cloud.rain", "sun.max"].randomElement()!)
+                .init(
+                    date: Calendar.current.date(byAdding: .hour, value: i, to: .now)!,
+                    temperature: Double(12 + i/2),
+                    symbol: ["cloud.sun", "cloud.rain", "sun.max"].randomElement()!
+                )
             }
         )
     )

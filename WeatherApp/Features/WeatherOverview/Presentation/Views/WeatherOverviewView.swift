@@ -27,7 +27,6 @@ struct WeatherOverviewView: View {
     @Environment(\.calendar) private var calendar
     @Environment(\.locale)   private var locale
 
-    let hourly: [HourForecastPoint]
     let daily: [DailyForecastPoint]
 
     @State var vm: WeatherOverviewViewModel
@@ -87,7 +86,7 @@ struct WeatherOverviewView: View {
                         .frame(width: 44, height: 5)
                         .padding(.top, 8)
                     
-                    if let details = vm.details {
+                    if let details = vm.details, let hourly = vm.hourly {
                         InfoBlock(content: ForecastStripView(hourly: hourly))
                         InfoBlock(content: DaysForecastView(daily: daily))
                         
@@ -169,14 +168,7 @@ struct WeatherOverviewView: View {
 
 
 #Preview {
-    let hourly = (0..<12).map { i in
-        HourForecastPoint(
-            date: Calendar.current.date(byAdding: .hour, value: i, to: .now)!,
-            celsius: Double(12 + i/2),
-            symbol: ["cloud.sun", "cloud.rain", "sun.max"].randomElement()!
-        )
-    }
-    
+
     let cal = Calendar.current
     let today = cal.startOfDay(for: .now)
     let daily: [DailyForecastPoint] = (0..<7).map { i in
@@ -194,7 +186,6 @@ struct WeatherOverviewView: View {
     }
     
     let vm = WeatherOverviewViewModel(
-        hourly: hourly,
         fetchDailyForecastUseCase: FetchDailyForecast(
             repository: WeatherRepositoryImpl(
                 api: WeatherForecastApiImpl(
@@ -210,7 +201,6 @@ struct WeatherOverviewView: View {
     )
     
     WeatherOverviewView(
-        hourly: hourly,
         daily: daily,
         vm: vm,
     )
