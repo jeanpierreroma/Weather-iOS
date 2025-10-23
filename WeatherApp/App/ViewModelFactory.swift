@@ -9,5 +9,5 @@ import Foundation
 
 protocol ViewModelFactory {
     @MainActor
-    func makeWeatherDetailsVM() -> WeatherDetailsViewModel
+    func makeWeatherOverviewViewModel() -> WeatherOverviewViewModel
 }
