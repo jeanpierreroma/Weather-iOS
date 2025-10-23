@@ -7,37 +7,20 @@
 
 import SwiftUI
 
-private struct HeightKey: PreferenceKey {
-    static var defaultValue: CGFloat = 0
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = max(value, nextValue()) }
-}
-private struct HeightReader: View {
-    var onChange: (CGFloat) -> Void
-    var body: some View {
-        GeometryReader { geo in
-            Color.clear.preference(key: HeightKey.self, value: geo.size.height)
-        }
-        .onPreferenceChange(HeightKey.self) { onChange($0) }
-    }
-}
-
 struct WeatherOverviewView: View {
     @Environment(\.temperatureUnit) private var tempUnit
     @Environment(\.windSpeedUnit) private var windSpeedUnit
     @Environment(\.calendar) private var calendar
-    @Environment(\.locale)   private var locale
+    @Environment(\.locale) private var locale
 
     let daily: [DailyForecastPoint]
 
     @State var vm: WeatherOverviewViewModel
-    
     @State private var scrollOffset: CGFloat = 0
-    @State private var headerMeasured: CGFloat = 0
-    @State private var stripMeasured:  CGFloat = 0
-    
     @State private var baseY: CGFloat?
     
     private var collapseDistance: CGFloat {
+        // TODO: change here
         return 350
     }
         
@@ -87,44 +70,7 @@ struct WeatherOverviewView: View {
                         .padding(.top, 8)
                     
                     if let details = vm.details, let hourly = vm.hourly {
-                        InfoBlock(content: ForecastStripView(hourly: hourly))
-                        InfoBlock(content: DaysForecastView(daily: daily))
-                        
-                        let airQualityProps = AirQualityPresenter.props(from: details.aqi)
-                        InfoBlock(content: AirQualityInfoContent(props: airQualityProps))
-                        
-                        HStack(spacing: 16) {
-                            let feelsProp = FeelsLikePresenter.props(from: details.feelsLike, unit: tempUnit)
-                            InfoBlock(content: FeelsLikeInfoContent(props: feelsProp))
-                                .frame(maxWidth: .infinity)
-                            
-                            let uvProps = UVPresenter.props(from: details.uvDetails)
-                            InfoBlock(content: UVIndexInfoContent(props: uvProps))
-                                .frame(maxWidth: .infinity)
-                        }
-                        
-                        let windProps = WindPresenter.props(from: details.windDetails, unit: windSpeedUnit)
-                        
-                        InfoBlock(content: WindInfoContent(props: windProps))
-                        
-                        let sunProps = SunPresenter.props(from: details.sunDetails, now: Date(), calendar: calendar, locale: locale)
-                        let precipProps = PrecipitationPresenter.props(from: details.precipitationDetails)
-                        HStack(spacing: 16) {
-                            InfoBlock(content: SunsetInfoContent(props: sunProps))
-                                .frame(maxWidth: .infinity)
-                            
-                            InfoBlock(content: PrecipitationInfoContent(props: precipProps))
-                                .frame(maxWidth: .infinity)
-                        }
-                        
-                        let visProps = VisibilityPresenter.props(from: details.visibilityDetails)
-                        let humidityProps = HumidityPresenter.props(from: details.humidityDetails)
-                        HStack(spacing: 16) {
-                            InfoBlock(content: VisibilityInfoContent(props: visProps))
-                                .frame(maxWidth: .infinity)
-                            InfoBlock(content: HumidityInfoContent(props: humidityProps))
-                                .frame(maxWidth: .infinity)
-                        }
+                        WeatherDetailsView(details: details, hourly: hourly, daily: daily)
                     } else {
                         ProgressView()
                     }                                        
@@ -137,10 +83,6 @@ struct WeatherOverviewView: View {
                 .padding(.top, 150)
             }
         }
-        .onPreferenceChange(PartHeightKey.self) { dict in
-            if let h = dict[.header] { headerMeasured = h }
-            if let s = dict[.strip]  { stripMeasured = s }
-        }
         .overlayPreferenceValue(ContentBoundsKey.self) { anchor in
             GeometryReader { proxy in
                 let rect = anchor.map { proxy[$0] } ?? .zero
@@ -148,11 +90,11 @@ struct WeatherOverviewView: View {
 
                 Color.clear
                     .onAppear {
+                        // TODO: change here
                         baseY = 189
                     }
                     .onChange(of: y) { _, newY in
                         let raw = (baseY ?? newY) - newY
-                        print(newY)
                         scrollOffset = max(0, raw)
                     }
             }
@@ -206,28 +148,9 @@ struct WeatherOverviewView: View {
     )
 }
 
-private enum Part: Hashable { case header, strip }
-
-private struct PartHeightKey: PreferenceKey {
-    static var defaultValue: [Part: CGFloat] = [:]
-    static func reduce(value: inout [Part: CGFloat], nextValue: () -> [Part: CGFloat]) {
-        value.merge(nextValue(), uniquingKeysWith: { max($0, $1) })
-    }
-}
-
 private struct ContentBoundsKey: PreferenceKey {
     static var defaultValue: Anchor<CGRect>? = nil
     static func reduce(value: inout Anchor<CGRect>?, nextValue: () -> Anchor<CGRect>?) {
         value = nextValue() ?? value
-    }
-}
-
-private extension View {
-    func measureHeight(_ part: Part) -> some View {
-        background(
-            GeometryReader { geo in
-                Color.clear.preference(key: PartHeightKey.self, value: [part: geo.size.height])
-            }
-        )
     }
 }
