@@ -7,40 +7,33 @@
 
 import SwiftUI
 
-private struct TemperatureUnitKey: EnvironmentKey {
-    static let defaultValue: TemperatureDisplayUnit = .celsius
-}
-
-private struct PressureUnitKey: EnvironmentKey {
-    static let defaultValue: PressureDisplayUnit = .hPa
-}
-
-private struct WindSpeedUnit: EnvironmentKey {
-    static let defaultValue: UnitSpeed = .metersPerSecond
-}
-
-private struct AppContainerKey: EnvironmentKey {
+@MainActor
+private struct AppContainerKey: @preconcurrency EnvironmentKey {
     static let defaultValue: AppContainer = AppContainer(config: .dev)
 }
 
+@MainActor
+private struct UserPreferencesKey: @preconcurrency EnvironmentKey {
+    static let defaultValue: UserPreferencesStore = {
+        
+        #if DEBUG
+        let repo: UserPreferencesRepository = InMemoryUserPreferencesRepository()
+        #else
+        let repo: UserPreferencesRepository = UserDefaultsUserPreferencesRepository()
+        #endif
+
+        return UserPreferencesStore(repo: repo)
+    }()
+}
+
 extension EnvironmentValues {
-    var temperatureUnit: TemperatureDisplayUnit {
-        get { self[TemperatureUnitKey.self] }
-        set { self[TemperatureUnitKey.self] = newValue }
-    }
-    
-    var pressureUnit: PressureDisplayUnit {
-        get { self[PressureUnitKey.self] }
-        set { self[PressureUnitKey.self] = newValue }
-    }
-    
-    var windSpeedUnit: UnitSpeed {
-        get { self[WindSpeedUnit.self] }
-        set { self[WindSpeedUnit.self] = newValue }
-    }
-    
     var appContainer: AppContainer {
         get { self[AppContainerKey.self] }
         set { self[AppContainerKey.self] = newValue }
+    }
+    
+    var userPreferences: UserPreferencesStore {
+        get { self[UserPreferencesKey.self] }
+        set { self[UserPreferencesKey.self] = newValue }
     }
 }
