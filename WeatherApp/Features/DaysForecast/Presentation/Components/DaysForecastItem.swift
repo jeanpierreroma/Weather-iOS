@@ -13,11 +13,13 @@ struct DaysForecastItem: View {
     var body: some View {
         HStack {
             Text(props.dayOfWeek)
+                .background()
             
             Spacer()
             
             Image(systemName: props.weatherIcon)
                 .padding(.trailing, 30)
+                .background()
                         
             HStack(spacing: 8) {
                 Text(props.lowestTemperatureText)
@@ -45,24 +47,37 @@ struct DaysForecastItem: View {
                 )
                 .frame(width: 100, height: 6)
                 
+                
                 Text(props.highestTemperatureText)
                     .monospacedDigit()
             }
-//            .background(.red)
+            .background(.red)
         }
     }
 }
 
 #Preview {
     let props = DaysForecastItemProps(
-        dayOfWeek: "Mon",
+        dayOfWeek: "Today",
         weatherIcon: "sun.max",
-        lowestTemperatureText: "-24°C",
-        highestTemperatureText: "10°C"
+        lowestTemperatureText: "-24°",
+        highestTemperatureText: "10°"
     )
     
-    DaysForecastItem(props: props)
+    ZStack {
+        WeatherGradients.gradient(forSymbol: "sun", isNight: false)
+        
+        VStack {
+            DaysForecastItem(props: props)
+            DaysForecastItem(props: props)
+            DaysForecastItem(props: props)
+            DaysForecastItem(props: props)
+            DaysForecastItem(props: props)
+        }
         .padding()
+    }
+    
+
 }
 
 
