@@ -115,7 +115,8 @@ struct CompassView: View {
                     .foregroundStyle(style.centerBadgeTextColor)
                     .frame(width: size * style.centerBadgeDiameterFraction,
                            height: size * style.centerBadgeDiameterFraction)
-                    .glassEffect(.regular, in: Circle())
+//                    .glassEffect(.regular, in: Circle())
+                    .background(.ultraThinMaterial, in: .circle)
                     .overlay(
                         Circle().stroke(style.centerBadgeBorderColor,
                                         lineWidth: style.centerBadgeBorderLineWidth)

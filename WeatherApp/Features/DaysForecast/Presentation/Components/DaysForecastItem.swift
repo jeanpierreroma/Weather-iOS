@@ -43,7 +43,6 @@ struct DaysForecastItem: View {
             )
         )
         .onPreferenceChange(TempMaxWidthKey.self) { measuredTempLabelWidth = $0 }
-        // міряємо зразки для дня тижня
         .background(DayWidthSamples(locale: locale, font: .body, includeToday: "Today"))
         .onPreferenceChange(DayMaxWidthKey.self) { measuredDayLabelWidth = $0 }
     }
@@ -63,8 +62,8 @@ struct DaysForecastItem: View {
                     (-40, .purple), (-20, .blue), (0, .cyan),
                     (10, .green), (20, .yellow), (30, .orange), (55, .red)
                 ],
-                value: 0,
                 barStyle: .init(barHeight: 6, cornerRadius: 3),
+                value: 0,
                 indicatorStyle: .init(
                     color: .white, diameter: 6, shadowRadius: 2, shadowOpacity: 0.45
                 )

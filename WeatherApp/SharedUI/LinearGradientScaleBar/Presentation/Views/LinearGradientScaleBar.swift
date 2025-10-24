@@ -11,9 +11,9 @@ import SwiftUI
 struct LinearGradientScaleBar: View {
     let totalRange: ClosedRange<Double>
     let colorStops: [(value: Double, color: Color)]
-    let value: Double
-
     let barStyle: ScaleBarStyle
+    
+    let value: Double?
     let indicatorStyle: ScaleIndicatorStyle
 
     var body: some View {
@@ -31,12 +31,13 @@ struct LinearGradientScaleBar: View {
                     )
                     .frame(height: barStyle.barHeight)
 
-                // Індикатор
-                let clamped = value.clamped(to: totalRange)
-                let x = xPosition(for: clamped, in: totalRange, totalWidth: width)
+                if let value = value {
+                    let clamped = value.clamped(to: totalRange)
+                    let x = xPosition(for: clamped, in: totalRange, totalWidth: width)
 
-                ScaleIndicator(style: indicatorStyle)
-                    .position(x: x, y: barStyle.barHeight / 2)
+                    ScaleIndicator(style: indicatorStyle)
+                        .position(x: x, y: barStyle.barHeight / 2)
+                }
             }
         }
     }
@@ -82,8 +83,8 @@ struct LinearGradientScaleBar: View {
                 (300, .red),
                 (500, .purple)
             ],
-            value: 170,
             barStyle: .init(barHeight: 6, cornerRadius: 3),
+            value: 170,
             indicatorStyle: .init(color: .white, diameter: 12, shadowRadius: 2, shadowOpacity: 0.45)
         )
         .padding(24)
@@ -108,8 +109,8 @@ struct LinearGradientScaleBar: View {
                 (8, .red), (10, .red),
                 (11, .purple)
             ],
-            value: 8,
             barStyle: .init(barHeight: 6, cornerRadius: 3),
+            value: 8,
             indicatorStyle: .init(color: .white, diameter: 12, shadowRadius: 2, shadowOpacity: 0.45)
         )
         .padding()

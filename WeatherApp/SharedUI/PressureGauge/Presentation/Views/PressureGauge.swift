@@ -8,11 +8,11 @@
 import SwiftUI
 
 public struct PressureGauge<Center: View>: View {
-    /// Значення в hPa
     public let value: Double
     public let minValue: Double
     public let maxValue: Double
     public let style: PressureGaugeStyle
+    
     @ViewBuilder public let center: () -> Center
 
     public init(
@@ -41,8 +41,8 @@ public struct PressureGauge<Center: View>: View {
             let norm = normalized(value: value, min: minValue, max: maxValue)
             let angle = Angle(degrees: style.startAngle.degrees +
                               (style.endAngle.degrees - style.startAngle.degrees) * norm)
-
-            ZStack {
+            
+            ZStack(alignment: .center) {
                 // Тіки
                 GaugeTickRing(
                     startAngle: style.startAngle,
@@ -54,7 +54,6 @@ public struct PressureGauge<Center: View>: View {
                     color: style.tickColor
                 )
 
-                // Стрілка
                 Capsule()
                     .frame(width: needleWidth, height: needleLen)
                     .foregroundStyle(style.needleColor)
@@ -62,16 +61,16 @@ public struct PressureGauge<Center: View>: View {
                     .offset(y: -(radius + needleLen * 0.15))
                     .rotationEffect(angle)
 
-                // Центровий контент
                 center()
-                
+                                
                 HStack(spacing: 20) {
                     Text("Low").metricCaptionStyle()
                     Text("High").metricCaptionStyle()
                 }
                 .padding(.top, radius * 2)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .frame(width: side, height: side)
+            .position(x: geo.size.width/2, y: geo.size.height/2) 
         }
     }
 
@@ -101,6 +100,23 @@ private struct GaugeTickRing: View {
                 .offset(y: -radius)
                 .rotationEffect(a)
                 .accessibilityHidden(true)
+        }
+    }
+}
+
+#Preview {
+    ZStack {
+        LinearGradient(colors: [.indigo, .purple, .pink],
+                       startPoint: .topLeading, endPoint: .bottomTrailing)
+        .ignoresSafeArea()
+
+        PressureGauge(
+            value: 996,
+            minValue: 965,
+            maxValue: 1100,
+            style: .weather
+        ) {
+            
         }
     }
 }

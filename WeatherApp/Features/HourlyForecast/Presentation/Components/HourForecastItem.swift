@@ -12,7 +12,6 @@ struct HourForecastItem: View {
     private let probabilityPlaceholder = "100%"
     
     var body: some View {
-//        GlassEffectContainer {
             VStack(alignment: .center, spacing: 4) {
                 Text(props.labelText)
                     .font(.callout.weight(.medium))
@@ -28,7 +27,7 @@ struct HourForecastItem: View {
                     Text(probabilityPlaceholder)
                         .font(.caption)
                 }
-                .hidden() // резервує висоту
+                .hidden()
                 .overlay {
                     if let probabilityText = props.weatherProbabilityText {
                         VStack(spacing: 0) {
@@ -58,7 +57,6 @@ struct HourForecastItem: View {
 //            .padding(.horizontal, 10)
 //            .background(.red)
 //            .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 24))
-//        }
     }
 }
 
