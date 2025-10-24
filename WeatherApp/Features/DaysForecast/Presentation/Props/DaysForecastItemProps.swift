@@ -12,4 +12,6 @@ struct DaysForecastItemProps {
     let weatherIcon: String
     let lowestTemperatureText: String
     let highestTemperatureText: String
+    let lowestTemperature: Double
+    let highestTemperature: Double
 }

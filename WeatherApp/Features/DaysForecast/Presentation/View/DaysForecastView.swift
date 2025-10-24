@@ -18,7 +18,7 @@ struct DaysForecastView: InfoBlockContent {
     let daily: [DailyForecastPoint]
     
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(alignment: .trailing, spacing: 24) {
             ForEach(daily) { f in
                 let props = DaysForecastItemPresenter.props(
                     date: f.date,

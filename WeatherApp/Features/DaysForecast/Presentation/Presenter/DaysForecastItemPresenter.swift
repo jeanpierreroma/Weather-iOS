@@ -18,14 +18,16 @@ enum DaysForecastItemPresenter {
         locale: Locale
     ) -> DaysForecastItemProps {
         let dayLabel = makeDayOfWeekLabel(for: date, calendar: calendar, locale: locale)
-        let low  = TemperatureFormatter.format(celsius: lowestCelsius,  to: tempUnit)
-        let high = TemperatureFormatter.format(celsius: highestCelsius, to: tempUnit)
-
+        let lowText = TemperatureFormatter.format(celsius: lowestCelsius,  to: tempUnit)
+        let highText = TemperatureFormatter.format(celsius: highestCelsius, to: tempUnit)
+        
         return DaysForecastItemProps(
             dayOfWeek: dayLabel,
             weatherIcon: symbol,
-            lowestTemperatureText: low,
-            highestTemperatureText: high
+            lowestTemperatureText: lowText,
+            highestTemperatureText: highText,
+            lowestTemperature: lowestCelsius,
+            highestTemperature: highestCelsius
         )
     }
 
@@ -34,8 +36,6 @@ enum DaysForecastItemPresenter {
         let dayStart   = calendar.startOfDay(for: date)
         let dayDiff = calendar.dateComponents([.day], from: todayStart, to: dayStart).day ?? 0
 
-        // Для Today/Tomorrow/Yesterday використовуємо DateFormatter з
-        // doesRelativeDateFormatting, щоб отримати локалізовані слова.
         func relativeName(for d: Date) -> String {
             let df = DateFormatter()
             df.locale = locale
@@ -54,7 +54,7 @@ enum DaysForecastItemPresenter {
             let df = DateFormatter()
             df.locale = locale
             df.calendar = calendar
-            df.setLocalizedDateFormatFromTemplate("EEE")    // коротка назва дня
+            df.setLocalizedDateFormatFromTemplate("EEE")    
             return df.string(from: date)
         }
     }
