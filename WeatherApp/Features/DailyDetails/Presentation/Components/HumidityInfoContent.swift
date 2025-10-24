@@ -17,9 +17,7 @@ struct HumidityInfoContent: InfoBlockContent {
         VStack(alignment: .leading) {
             Text(props.valueText)
                 .metricValueStyle()
-            
-            Spacer()
-            
+                        
             Text(props.summaryText)
                 .metricCaptionStyle()
         }
@@ -37,7 +35,7 @@ struct HumidityInfoContent: InfoBlockContent {
         InfoBlock(
             content: HumidityInfoContent(
                 props: .init(
-                    valueText: "89",
+                    valueText: "89%",
                     summaryText: "The dew point is 20° right now."
                 )
             ),

@@ -14,13 +14,13 @@ struct PressureInfoContent: InfoBlockContent {
     var headerIconSystemName = "gauge"
     
     let currentPressure: Int
-    var minPressure: Int = 300
-    var maxPressure: Int = 1100
+    var minPressure: Int = 960
+    var maxPressure: Int = 1065
 
     private var clamped: Int { currentPressure.clamped(to: minPressure...maxPressure) }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 10) {
             PressureGauge(
                 value: Double(clamped),
                 minValue: Double(minPressure),
@@ -38,6 +38,7 @@ struct PressureInfoContent: InfoBlockContent {
                         .metricCaptionStyle()
                 }
             }
+            .frame(height: 120) 
         }
     }
 
@@ -58,18 +59,6 @@ private struct EqualBarsIcon: View {
     }
 }
 
-enum PressureDisplayUnit: String, CaseIterable, Sendable {
-    case hPa, mmHg, inHg
-
-    var label: String {
-        switch self {
-        case .hPa:  return "hPa"
-        case .mmHg: return "mmHg"
-        case .inHg: return "inHg"
-        }
-    }
-}
-
 #Preview {
     ZStack {
         LinearGradient(colors: [.indigo, .purple, .pink],
@@ -77,7 +66,7 @@ enum PressureDisplayUnit: String, CaseIterable, Sendable {
         .ignoresSafeArea()
 
         InfoBlock(
-            content: PressureInfoContent(currentPressure: 1024),
+            content: PressureInfoContent(currentPressure: 996),
             kind: .clear,
             isNight: false
         )

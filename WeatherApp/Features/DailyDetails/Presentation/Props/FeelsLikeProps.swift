@@ -8,7 +8,10 @@
 
 import SwiftUI
 
-public struct FeelsLikeProps {
-    public let temperatureText: String
-    public let summary: String
+struct FeelsLikeProps {
+    let apparentTemperatureText: String
+    let actualTemperatureText: String
+    let summary: String
+    let apparentTemperatureValue: Double
+    let actualTemperatureValue: Double
 }

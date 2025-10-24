@@ -11,7 +11,7 @@ import SwiftUI
 enum HumidityPresenter {
     static func props(from details: HumidityDetails) -> HumidityProps {
         HumidityProps(
-            valueText: "\(details.humidityPercent) %",
+            valueText: "\(details.humidityPercent)%",
             summaryText: details.summary
         )
     }

@@ -27,8 +27,8 @@ struct AirQualityInfoContent: InfoBlockContent {
             LinearGradientScaleBar(
                 totalRange: 0.0...500.0,
                 colorStops: props.colorStops,
-                value: props.valueNumber,
                 barStyle: .init(barHeight: 6, cornerRadius: 3),
+                value: props.valueNumber,
                 indicatorStyle: .init(color: .white, diameter: 12, shadowRadius: 2, shadowOpacity: 0.5)
             )
 

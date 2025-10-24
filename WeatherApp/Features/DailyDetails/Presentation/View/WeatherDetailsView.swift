@@ -57,7 +57,14 @@ struct WeatherDetailsView: View {
                 .frame(maxWidth: .infinity)
                 
                 InfoBlock(
-                    content: UVIndexInfoContent(props: uvProps),
+                    content: AveragesInfoContent(
+                        props: .init(
+                            differenceText: "+8°",
+                            summary: "above average daily high",
+                            todayAverageText: "H:17°",
+                            averageText: "H:9°"
+                        )
+                    ),
                     kind: .clear,
                     isNight: false
                 )
@@ -72,14 +79,14 @@ struct WeatherDetailsView: View {
             
             HStack(spacing: hSpacing) {
                 InfoBlock(
-                    content: SunsetInfoContent(props: sunProps),
+                    content: UVIndexInfoContent(props: uvProps),
                     kind: .clear,
                     isNight: false
                 )
                 .frame(maxWidth: .infinity)
                 
                 InfoBlock(
-                    content: PrecipitationInfoContent(props: precipProps),
+                    content: SunsetInfoContent(props: sunProps),
                     kind: .clear,
                     isNight: false
                 )
@@ -88,19 +95,48 @@ struct WeatherDetailsView: View {
             
             HStack(spacing: hSpacing) {
                 InfoBlock(
-                    content: VisibilityInfoContent(props: visProps),
+                    content: PrecipitationInfoContent(props: precipProps),
                     kind: .clear,
                     isNight: false
                 )
                 .frame(maxWidth: .infinity)
                 
                 InfoBlock(
-                    content: HumidityInfoContent(props: humidityProps),
+                    content: VisibilityInfoContent(props: visProps),
                     kind: .clear,
                     isNight: false
                 )
                 .frame(maxWidth: .infinity)
             }
+            
+            InfoBlock(
+                content: WaxingCrescentInfoContent(
+                    props: .init(
+                        illuminationText: "8%",
+                        moonsetText: "18:17",
+                        nextFullMoonText: "12 days"
+                    )
+                ),
+                kind: .clear,
+                isNight: false
+            )
+            
+            HStack(spacing: hSpacing) {
+                InfoBlock(
+                    content: HumidityInfoContent(props: humidityProps),
+                    kind: .clear,
+                    isNight: false
+                )
+                .frame(maxWidth: .infinity)
+                
+                InfoBlock(
+                    content: PressureInfoContent(currentPressure: 996),
+                    kind: .clear,
+                    isNight: false
+                )
+                .frame(maxWidth: .infinity)
+            }
+
         }
     }
     
@@ -140,7 +176,7 @@ struct WeatherDetailsView: View {
 #Preview {
     let details = WeatherDetails(
         aqi: .init(index: 50, standard: "Good", summary: "Air quality index is \(50), which is similar to yesterday at about this time."),
-        feelsLike: .init(temperature: 21, summary: "Similar to the actual temperature."),
+        feelsLike: .init(apparentTemperature: 21, actualTemperature: 20, summary: "Similar to the actual temperature."),
         uvDetails: .init(index: 0, standard: "Low", summary: ""),
         windDetails: .init(windSpeedMps: 18, gustSpeedMps: 6, directionDegrees: 315),
         sunDetails: .init(

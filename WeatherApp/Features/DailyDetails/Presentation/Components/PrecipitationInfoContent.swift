@@ -23,9 +23,7 @@ struct PrecipitationInfoContent: InfoBlockContent {
                     .font(.headline)
                     .foregroundStyle(.primary)
             }
-            
-            Spacer()
-            
+                        
             Text(props.summaryText)
                 .metricCaptionStyle()
         }
@@ -43,7 +41,7 @@ struct PrecipitationInfoContent: InfoBlockContent {
         InfoBlock(
             content: PrecipitationInfoContent(
                 props: .init(
-                    valueText: "5",
+                    valueText: "5 mm",
                     periodTitle: "in last 24h",
                     summaryText: "<1 mm expected in next 24h"
                 )

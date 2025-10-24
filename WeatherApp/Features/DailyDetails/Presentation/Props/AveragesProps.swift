@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+struct AveragesProps {
+    let differenceText: String
+    let summary: String
+    let todayAverageText: String
+    let averageText: String
+}
