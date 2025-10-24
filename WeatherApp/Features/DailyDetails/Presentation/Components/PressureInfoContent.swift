@@ -12,12 +12,10 @@ import SwiftUI
 struct PressureInfoContent: InfoBlockContent {
     var header = "Pressure"
     var headerIconSystemName = "gauge"
-
-    @Environment(\.pressureUnit) private var pressureUnit
     
     let currentPressure: Int
-    var minPressure: Int = 980
-    var maxPressure: Int = 1040
+    var minPressure: Int = 300
+    var maxPressure: Int = 1100
 
     private var clamped: Int { currentPressure.clamped(to: minPressure...maxPressure) }
 
@@ -33,10 +31,10 @@ struct PressureInfoContent: InfoBlockContent {
                     EqualBarsIcon()
                         .foregroundStyle(.white.opacity(0.9))
 
-                    Text(Self.formattedNumber(hPa: clamped, unit: pressureUnit))
+                    Text(Self.formattedNumber(hPa: clamped))
                         .metricValueStyle()
 
-                    Text(pressureUnit.label)
+                    Text("hPa")
                         .metricCaptionStyle()
                 }
             }
@@ -45,17 +43,8 @@ struct PressureInfoContent: InfoBlockContent {
 
     // MARK: - Formatting helpers
 
-    static func formattedNumber(hPa: Int, unit: PressureDisplayUnit) -> String {
-        switch unit {
-        case .hPa:
-            return hPa.formatted(.number.grouping(.automatic))
-        case .mmHg:
-            let mmHg = Int((Double(hPa) * 0.750061683).rounded())
-            return mmHg.formatted(.number.grouping(.automatic))
-        case .inHg:
-            let inHg = Double(hPa) * 0.0295299830714
-            return String(format: "%.2f", inHg)
-        }
+    static func formattedNumber(hPa: Int) -> String {
+        return hPa.formatted(.number.grouping(.automatic))
     }
 }
 
@@ -87,7 +76,11 @@ enum PressureDisplayUnit: String, CaseIterable, Sendable {
                        startPoint: .topLeading, endPoint: .bottomTrailing)
         .ignoresSafeArea()
 
-        InfoBlock(content: PressureInfoContent(currentPressure: 1024))
+        InfoBlock(
+            content: PressureInfoContent(currentPressure: 1024),
+            kind: .clear,
+            isNight: false
+        )
             .padding()
     }
 }

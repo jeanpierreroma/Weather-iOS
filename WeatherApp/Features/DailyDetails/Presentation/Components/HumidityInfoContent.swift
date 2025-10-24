@@ -40,7 +40,9 @@ struct HumidityInfoContent: InfoBlockContent {
                     valueText: "89",
                     summaryText: "The dew point is 20° right now."
                 )
-            )
+            ),
+            kind: .clear,
+            isNight: false
         )
         .padding()
     }

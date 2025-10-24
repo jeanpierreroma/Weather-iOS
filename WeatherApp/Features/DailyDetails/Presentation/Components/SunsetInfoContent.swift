@@ -55,7 +55,9 @@ struct SunsetInfoContent: InfoBlockContent {
                         sunsetText: "18:00",
                         dayFraction: 0.2
                     )
-                )
+                ),
+                kind: .clear,
+                isNight: false
             )
         }
         .padding()

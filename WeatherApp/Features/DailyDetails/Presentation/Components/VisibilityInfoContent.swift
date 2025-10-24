@@ -32,7 +32,13 @@ struct VisibilityInfoContent: InfoBlockContent {
                        startPoint: .topLeading, endPoint: .bottomTrailing)
         .ignoresSafeArea()
 
-        InfoBlock(content: VisibilityInfoContent(props: .init(valueText: "17", summaryText: "Perfectly clear view.")))
-            .padding()
+        InfoBlock(
+            content: VisibilityInfoContent(
+                props: .init(valueText: "17", summaryText: "Perfectly clear view.")
+            ),
+            kind: .clear,
+            isNight: false
+        )
+        .padding()
     }
 }

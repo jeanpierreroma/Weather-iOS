@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct WeatherDetailsView: View {
-    @Environment(\.temperatureUnit) private var tempUnit
-    @Environment(\.windSpeedUnit) private var windSpeedUnit
+    @Environment(\.userPreferences) private var prefs
     @Environment(\.calendar) private var calendar
     @Environment(\.locale) private var locale
     
@@ -33,32 +32,74 @@ struct WeatherDetailsView: View {
     
     var body: some View {
         VStack(spacing: vSpacing) {
-            InfoBlock(content: ForecastStripView(hourly: hourly))
-            InfoBlock(content: DaysForecastView(daily: daily))
-            InfoBlock(content: AirQualityInfoContent(props: airQualityProps))
+            InfoBlock(
+                content: ForecastStripView(hourly: hourly),
+                kind: .clear,
+                isNight: false
+            )
+            InfoBlock(
+                content: DaysForecastView(daily: daily),
+                kind: .clear,
+                isNight: false
+            )
+            InfoBlock(
+                content: AirQualityInfoContent(props: airQualityProps),
+                kind: .clear,
+                isNight: false
+            )
             
             HStack(spacing: hSpacing) {
-                InfoBlock(content: FeelsLikeInfoContent(props: feelsProps))
-                    .frame(maxWidth: .infinity)
-                InfoBlock(content: UVIndexInfoContent(props: uvProps))
-                    .frame(maxWidth: .infinity)
-            }
-            
-            InfoBlock(content: WindInfoContent(props: windProps))
-            
-            HStack(spacing: hSpacing) {
-                InfoBlock(content: SunsetInfoContent(props: sunProps))
-                    .frame(maxWidth: .infinity)
+                InfoBlock(
+                    content: FeelsLikeInfoContent(props: feelsProps),
+                    kind: .clear,
+                    isNight: false
+                )
+                .frame(maxWidth: .infinity)
                 
-                InfoBlock(content: PrecipitationInfoContent(props: precipProps))
-                    .frame(maxWidth: .infinity)
+                InfoBlock(
+                    content: UVIndexInfoContent(props: uvProps),
+                    kind: .clear,
+                    isNight: false
+                )
+                .frame(maxWidth: .infinity)
+            }
+            
+            InfoBlock(
+                content: WindInfoContent(props: windProps),
+                kind: .clear,
+                isNight: false
+            )
+            
+            HStack(spacing: hSpacing) {
+                InfoBlock(
+                    content: SunsetInfoContent(props: sunProps),
+                    kind: .clear,
+                    isNight: false
+                )
+                .frame(maxWidth: .infinity)
+                
+                InfoBlock(
+                    content: PrecipitationInfoContent(props: precipProps),
+                    kind: .clear,
+                    isNight: false
+                )
+                .frame(maxWidth: .infinity)
             }
             
             HStack(spacing: hSpacing) {
-                InfoBlock(content: VisibilityInfoContent(props: visProps))
-                    .frame(maxWidth: .infinity)
-                InfoBlock(content: HumidityInfoContent(props: humidityProps))
-                    .frame(maxWidth: .infinity)
+                InfoBlock(
+                    content: VisibilityInfoContent(props: visProps),
+                    kind: .clear,
+                    isNight: false
+                )
+                .frame(maxWidth: .infinity)
+                
+                InfoBlock(
+                    content: HumidityInfoContent(props: humidityProps),
+                    kind: .clear,
+                    isNight: false
+                )
+                .frame(maxWidth: .infinity)
             }
         }
     }
@@ -68,7 +109,7 @@ struct WeatherDetailsView: View {
     }
     
     private var feelsProps: FeelsLikeProps {
-        FeelsLikePresenter.props(from: details.feelsLike, unit: tempUnit)
+        FeelsLikePresenter.props(from: details.feelsLike, unit: prefs.prefs.temperatureUnit)
     }
     
     private var uvProps: UVProps {
@@ -80,7 +121,7 @@ struct WeatherDetailsView: View {
     }
     
     private var windProps: WindProps {
-        WindPresenter.props(from: details.windDetails, unit: windSpeedUnit)
+        WindPresenter.props(from: details.windDetails, unit: prefs.prefs.windSpeedUnit)
     }
     
     private var precipProps: PrecipitationProps {

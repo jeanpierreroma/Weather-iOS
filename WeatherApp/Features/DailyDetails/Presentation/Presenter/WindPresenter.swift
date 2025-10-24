@@ -8,7 +8,7 @@
 import Foundation
 
 enum WindPresenter {
-    static func props(from d: WindDetails, unit: UnitSpeed, locale: Locale = .current) -> WindProps {
+    static func props(from d: WindDetails, unit: WindSpeedUnit, locale: Locale = .current) -> WindProps {
         let windText = SpeedFormatter.text(mps: d.windSpeedMps, to: unit, locale: locale)
         let gustText = SpeedFormatter.text(mps: d.gustSpeedMps, to: unit, locale: locale)
 

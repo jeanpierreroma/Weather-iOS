@@ -47,7 +47,9 @@ struct WindInfoContent: InfoBlockContent {
                     directionDegrees: 315,
                     windForCompass: .init(value: 18, unit: .metersPerSecond)
                 )
-            )
+            ),
+            kind: .clear,
+            isNight: false
         )
         .padding()
     }

@@ -12,22 +12,26 @@ enum HourForecastItemPresenter {
         date: Date,
         celsius: Double,
         symbol: String,
-        tempUnit: TemperatureDisplayUnit,
+        tempUnit: TemperatureUnit,
+        weatherProbability: Int? = nil,
         calendar: Calendar,
         locale: Locale
     ) -> HourForecastItemProps {
         let label = makeLabel(for: date, calendar: calendar, locale: locale)
         let temp = TemperatureFormatter.format(celsius: celsius, to: tempUnit)
+        let probabilityText = weatherProbability.map(String.init(describing:)) ?? nil
 
         return HourForecastItemProps(
             labelText: label,
-            symbolName: symbol,
+            weatherSymbolName: symbol,
+            weatherProbabilityText: probabilityText,
             temperatureText: temp
         )
     }
 
     private static func makeLabel(for date: Date, calendar: Calendar, locale: Locale) -> String {
-        let df = TimeFormatters.shortTime(calendar: calendar, locale: locale)
-        return df.string(from: date)
+        let rounded = TimeFormatters.roundToHour(date, calendar: calendar, mode: .floor)
+        let f = TimeFormatters.shortTime(calendar: calendar, locale: locale, hoursOnly: true)
+        return f.string(from: rounded)
     }
 }

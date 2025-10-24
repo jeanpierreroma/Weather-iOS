@@ -69,7 +69,9 @@ struct AirQualityInfoContent: InfoBlockContent {
                     summary: "Descreption",
                     colorStops: defaultStops
                 )
-            )
+            ),
+            kind: .clear,
+            isNight: false
         )
         .padding()
     }

@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct WeatherOverviewView: View {
-    @Environment(\.temperatureUnit) private var tempUnit
-    @Environment(\.windSpeedUnit) private var windSpeedUnit
+    @Environment(\.userPreferences) private var prefs
     @Environment(\.calendar) private var calendar
     @Environment(\.locale) private var locale
 
@@ -41,7 +40,6 @@ struct WeatherOverviewView: View {
     private var headerYOffset: CGFloat {
         -min(18, 18 * expandProgress)
     }
-
     
     var body: some View {
         VStack(spacing: 0) {
@@ -71,6 +69,7 @@ struct WeatherOverviewView: View {
                     
                     if let details = vm.details, let hourly = vm.hourly {
                         WeatherDetailsView(details: details, hourly: hourly, daily: daily)
+                            .backgroundExtensionEffect()
                     } else {
                         ProgressView()
                     }                                        
@@ -100,7 +99,7 @@ struct WeatherOverviewView: View {
             }
         }
         .background(
-            Image("OverviewBackground")
+            vm.getLLinearGradientBackground()
         )
         .task {
             await vm.loadData()

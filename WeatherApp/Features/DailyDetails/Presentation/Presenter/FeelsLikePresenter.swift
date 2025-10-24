@@ -6,7 +6,7 @@
 //
 
 enum FeelsLikePresenter {
-    static func props(from details: FeelsLikeDetails, unit: TemperatureDisplayUnit) -> FeelsLikeProps {
+    static func props(from details: FeelsLikeDetails, unit: TemperatureUnit) -> FeelsLikeProps {
         .init(
             temperatureText: TemperatureFormatter.format(celsius: details.temperature, to: unit),
             summary: details.summary

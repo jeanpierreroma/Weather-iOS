@@ -64,7 +64,9 @@ struct UVIndexInfoContent: InfoBlockContent {
                     summary: "Description",
                     colorStops: defaultStops
                 )
-            )
+            ),
+            kind: .clear,
+            isNight: false
         )
             .padding()
     }

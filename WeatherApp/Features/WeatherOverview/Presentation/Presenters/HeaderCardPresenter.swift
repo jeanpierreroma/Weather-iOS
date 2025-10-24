@@ -14,7 +14,7 @@ enum HeaderCardPresenter {
         additioanlInformation: String,
         highestTemperature: Double,
         lowestTemperature: Double,
-        tempUnit: TemperatureDisplayUnit
+        tempUnit: TemperatureUnit
     ) -> HeaderCardProps {
         let currentTemperatureFormatted = TemperatureFormatter.format(celsius: currentTemperature, to: tempUnit)
         let highestTemperatureFormatted = TemperatureFormatter.format(celsius: highestTemperature, to: tempUnit)

@@ -11,7 +11,7 @@ struct DaysForecastView: InfoBlockContent {
     var header = "10-Day Forecast"
     var headerIconSystemName = "calendar"
     
-    @Environment(\.temperatureUnit) private var tempUnit
+    @Environment(\.userPreferences) private var prefs
     @Environment(\.calendar) private var calendar
     @Environment(\.locale) private var locale
     
@@ -25,7 +25,7 @@ struct DaysForecastView: InfoBlockContent {
                     lowestCelsius: f.lowestCelsius,
                     highestCelsius: f.highestCelsius,
                     symbol: f.symbol,
-                    tempUnit: tempUnit,
+                    tempUnit: prefs.prefs.temperatureUnit,
                     calendar: calendar,
                     locale: locale
                 )
@@ -62,6 +62,10 @@ struct DailyForecastPoint: Identifiable, Equatable {
         )
     }
     
-    InfoBlock(content: DaysForecastView(daily: daily))
+    InfoBlock(
+        content: DaysForecastView(daily: daily),
+        kind: .clear,
+        isNight: false
+    )
     .padding()
 }

@@ -40,13 +40,10 @@ struct FeelsLikeInfoContent: InfoBlockContent {
                     temperatureText: "21",
                     summary: "Similar to the actual temperature."
                 )
-            )
+            ),
+            kind: .clear,
+            isNight: false
         )
-            .padding()
+        .padding()
     }
-}
-
-enum TemperatureDisplayUnit: String, CaseIterable, Sendable {
-    case celsius, fahrenheit
-    var suffix: String { self == .celsius ? "C" : "F" }
 }

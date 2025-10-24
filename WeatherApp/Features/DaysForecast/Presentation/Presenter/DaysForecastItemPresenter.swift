@@ -13,7 +13,7 @@ enum DaysForecastItemPresenter {
         lowestCelsius: Double,
         highestCelsius: Double,
         symbol: String,
-        tempUnit: TemperatureDisplayUnit,
+        tempUnit: TemperatureUnit,
         calendar: Calendar,
         locale: Locale
     ) -> DaysForecastItemProps {

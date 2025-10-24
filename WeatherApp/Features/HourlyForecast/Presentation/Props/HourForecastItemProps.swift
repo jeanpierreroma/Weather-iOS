@@ -8,7 +8,8 @@
 import Foundation
 
 public struct HourForecastItemProps: Sendable, Equatable {
-    public let labelText: String         
-    public let symbolName: String
+    public let labelText: String
+    public let weatherSymbolName: String
+    public let weatherProbabilityText: String?
     public let temperatureText: String
 }

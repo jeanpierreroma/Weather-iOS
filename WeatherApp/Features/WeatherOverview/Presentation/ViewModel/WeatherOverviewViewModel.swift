@@ -7,6 +7,7 @@
 
 import Observation
 import UIKit
+import SwiftUI
 
 @MainActor
 @Observable
@@ -31,6 +32,11 @@ final class WeatherOverviewViewModel {
         
         self.details = makeMockWeatherDetails()
         self.hourly = makeMockHourlyForecastPoints()
+    }
+    
+    public func getLLinearGradientBackground() -> LinearGradient {
+        WeatherGradients.gradient(forSymbol: "sun", isNight: false)
+        
     }
     
     private func makeMockWeatherDetails() -> WeatherDetails {

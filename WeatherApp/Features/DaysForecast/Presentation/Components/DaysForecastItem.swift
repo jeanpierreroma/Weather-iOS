@@ -78,7 +78,7 @@ enum TemperatureScale {
         ( 55, .red)
     ]
 
-    static func rangeAndStops(for unit: TemperatureDisplayUnit) -> (ClosedRange<Double>, [(Double, Color)]) {
+    static func rangeAndStops(for unit: TemperatureUnit) -> (ClosedRange<Double>, [(Double, Color)]) {
         switch unit {
         case .celsius:
             return (celsiusRange, celsiusStops)

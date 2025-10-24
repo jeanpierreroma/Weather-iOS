@@ -47,7 +47,9 @@ struct PrecipitationInfoContent: InfoBlockContent {
                     periodTitle: "in last 24h",
                     summaryText: "<1 mm expected in next 24h"
                 )
-            )
+            ),
+            kind: .clear,
+            isNight: false
         )
         .padding()
     }

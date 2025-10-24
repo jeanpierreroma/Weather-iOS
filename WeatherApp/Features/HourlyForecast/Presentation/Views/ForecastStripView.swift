@@ -11,7 +11,7 @@ struct ForecastStripView: InfoBlockContent {
     var header = "Hourly Forecast"
     var headerIconSystemName = "clock"
     
-    @Environment(\.temperatureUnit) private var tempUnit
+    @Environment(\.userPreferences) private var prefs
     @Environment(\.calendar) private var calendar
     @Environment(\.locale) private var locale
     
@@ -19,18 +19,19 @@ struct ForecastStripView: InfoBlockContent {
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 12) {
+            HStack(spacing: 22) {
                 ForEach(hourly) { p in
                     let props = HourForecastItemPresenter.props(
                         date: p.date,
                         celsius: p.temperature,
                         symbol: p.symbol,
-                        tempUnit: tempUnit,
+                        tempUnit: prefs.prefs.temperatureUnit,
                         calendar: calendar,
                         locale: locale
                     )
                     
                     HourForecastItem(props: props)
+//                        .background(.red)
                 }
             }
         }
@@ -40,16 +41,27 @@ struct ForecastStripView: InfoBlockContent {
 
 
 #Preview {
-    InfoBlock(
-        content: ForecastStripView(
-            hourly: (0..<12).map { i in
-                .init(
-                    date: Calendar.current.date(byAdding: .hour, value: i, to: .now)!,
-                    temperature: Double(12 + i/2),
-                    symbol: ["cloud.sun", "cloud.rain", "sun.max"].randomElement()!
-                )
-            }
+    ZStack {
+//        LinearGradient(
+//            colors: [.blue.opacity(0.25), .indigo.opacity(0.25), .gray.opacity(0.15)],
+//            startPoint: .topLeading, endPoint: .bottomTrailing
+//        )
+        
+        InfoBlock(
+            content: ForecastStripView(
+                hourly: (0..<12).map { i in
+                    .init(
+                        date: Calendar.current.date(byAdding: .hour, value: i, to: .now)!,
+                        temperature: Double(12 + i/2),
+                        symbol: ["cloud.sun", "cloud.rain", "sun.max"].randomElement()!
+                    )
+                }
+            ),
+            kind: .clear,
+            isNight: false
         )
-    )
-    .padding()
+        .padding()
+    }
+    
+
 }
