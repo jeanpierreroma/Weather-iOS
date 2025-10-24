@@ -44,7 +44,8 @@ enum DailyForecastMapper {
 
         // Feels Like
         let feels = FeelsLikeDetails(
-            temperature: dto.feelsLikeDetailsDto.feelsLikeTemperature,
+            apparentTemperature: dto.feelsLikeDetailsDto.apparentTemperature,
+            actualTemperature: dto.feelsLikeDetailsDto.actualTemperature,
             summary: dto.feelsLikeDetailsDto.summary
         )
 

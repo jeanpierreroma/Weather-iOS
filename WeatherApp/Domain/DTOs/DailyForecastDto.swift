@@ -51,7 +51,8 @@ struct AirQualityDetailsDto: Sendable, Decodable {
 }
 
 struct FeelsLikeDetailsDto: Sendable, Decodable {
-    let feelsLikeTemperature: Double
+    let apparentTemperature: Double
+    let actualTemperature: Double
     let summary: String
 }
 
