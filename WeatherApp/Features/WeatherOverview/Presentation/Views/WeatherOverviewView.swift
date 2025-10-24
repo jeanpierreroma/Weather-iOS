@@ -98,9 +98,9 @@ struct WeatherOverviewView: View {
                     }
             }
         }
-        .background(
-            vm.getLLinearGradientBackground()
-        )
+//        .background(
+//            vm.getLLinearGradientBackground()
+//        )
         .task {
             await vm.loadData()
         }
