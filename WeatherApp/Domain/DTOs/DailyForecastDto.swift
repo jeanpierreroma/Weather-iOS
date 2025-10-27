@@ -17,6 +17,7 @@ struct DailyForecastDto: Sendable, Decodable {
     let uvDetailsDto: UvDetailsDto
     let visibilityDetailsDto: VisibilityDetailsDto
     let windDetailsDto: WindDetailsDto
+    let moonDetailsDto: MoonDetailsDto
     
     private enum CodingKeys: String, CodingKey {
         case airQualityDetails
@@ -28,6 +29,7 @@ struct DailyForecastDto: Sendable, Decodable {
         case uvDetails
         case visibilityDetails
         case windDetails
+        case moonDetails
     }
 
     init(from decoder: Decoder) throws {
@@ -41,6 +43,7 @@ struct DailyForecastDto: Sendable, Decodable {
         uvDetailsDto             = try c.decode(UvDetailsDto.self,             forKey: .uvDetails)
         visibilityDetailsDto     = try c.decode(VisibilityDetailsDto.self,     forKey: .visibilityDetails)
         windDetailsDto           = try c.decode(WindDetailsDto.self,           forKey: .windDetails)
+        moonDetailsDto           = try c.decode(MoonDetailsDto.self,           forKey: .moonDetails)
     }
 }
 
@@ -91,4 +94,12 @@ struct WindDetailsDto: Sendable, Decodable {
     let windSpeedMps: Double
     let gustSpeedMps: Double
     let directionDegrees: Int
+}
+
+struct MoonDetailsDto: Sendable, Decodable {
+    let phaseName: String
+    let illuminationPercent: Double
+    let phaseFraction: Double
+    let moonsetText: String?
+    let daysUntilFullMoon: Int?
 }

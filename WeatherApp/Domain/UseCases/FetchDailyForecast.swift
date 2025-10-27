@@ -99,6 +99,19 @@ enum DailyForecastMapper {
             summary: dto.pressureDetailsDto.summary
         )
 
+        // Moon
+        let moonset = parseOptionalMoonTime(
+            dto.moonDetailsDto.moonsetText,
+            now: now, calendar: calendar, timeZone: timeZone, locale: locale
+        )
+        let moon = MoonDetails(
+            phaseName: dto.moonDetailsDto.phaseName,
+            illuminationPercent: dto.moonDetailsDto.illuminationPercent,
+            phaseFraction: dto.moonDetailsDto.phaseFraction.clamped(to: 0...1),
+            moonset: moonset,
+            daysUntilFullMoon: dto.moonDetailsDto.daysUntilFullMoon
+        )
+
         return WeatherDetails(
             aqi: air,
             feelsLike: feels,
@@ -108,7 +121,8 @@ enum DailyForecastMapper {
             precipitationDetails: precip,
             visibilityDetails: vis,
             humidityDetails: humidity,
-            pressureDetails: pressure
+            pressureDetails: pressure,
+            moonDetails: moon
         )
     }
 
@@ -184,5 +198,39 @@ enum DailyForecastMapper {
         var cal = base
         cal.timeZone = timeZone
         return cal
+    }
+
+    private static func parseOptionalMoonTime(
+        _ text: String?,
+        now: Date,
+        calendar: Calendar,
+        timeZone: TimeZone,
+        locale: Locale
+    ) -> Date? {
+        guard let text, !text.isEmpty else { return nil }
+
+        if let d = iso8601WithFraction.date(from: text) ?? iso8601.date(from: text) {
+            return d
+        }
+
+        for f in timeFormatters(locale: locale, timeZone: timeZone) {
+            if let t = f.date(from: text) {
+                let tzCal = calendarSetting(calendar, timeZone: timeZone)
+                let day = tzCal.dateComponents(in: timeZone, from: now)
+                var comps = DateComponents()
+                comps.year = day.year
+                comps.month = day.month
+                comps.day = day.day
+
+                let time = tzCal.dateComponents([.hour, .minute, .second], from: t)
+                comps.hour = time.hour
+                comps.minute = time.minute
+                comps.second = time.second
+
+                return tzCal.date(from: comps)
+            }
+        }
+
+        return nil
     }
 }

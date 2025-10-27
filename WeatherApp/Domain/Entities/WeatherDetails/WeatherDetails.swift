@@ -17,4 +17,5 @@ struct WeatherDetails {
     let visibilityDetails: VisibilityDetails
     let humidityDetails: HumidityDetails
     let pressureDetails: PressureDetails
+    let moonDetails: MoonDetails
 }

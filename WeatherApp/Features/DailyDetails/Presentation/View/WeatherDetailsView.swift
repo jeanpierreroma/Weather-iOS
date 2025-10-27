@@ -186,7 +186,14 @@ struct WeatherDetailsView: View {
         precipitationDetails: .init(precipLast24hMm: 5, summary: "<1 mm expected in next 24h"),
         visibilityDetails: .init(visibilityKm: 16, summary: "Perfectly clear view."),
         humidityDetails: .init(humidityPercent: 89, summary: "The dew point is 20° right now."),
-        pressureDetails: .init(pressureHpa: 1024, summary: "")
+        pressureDetails: .init(pressureHpa: 1024, summary: ""),
+        moonDetails: .init(
+            phaseName: "Waxing Crescent",
+            illuminationPercent: 8,
+            phaseFraction: 0.22,
+            moonset: Calendar.current.date(bySettingHour: 18, minute: 17, second: 0, of: .now)!,
+            daysUntilFullMoon: 12
+        )
     )
     
     let hourly: [HourForecastPoint] = (0..<12).map { i in
