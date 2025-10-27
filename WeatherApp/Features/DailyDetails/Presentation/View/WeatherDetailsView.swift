@@ -110,13 +110,7 @@ struct WeatherDetailsView: View {
             }
             
             InfoBlock(
-                content: WaxingCrescentInfoContent(
-                    props: .init(
-                        illuminationText: "8%",
-                        moonsetText: "18:17",
-                        nextFullMoonText: "12 days"
-                    )
-                ),
+                content: WaxingCrescentInfoContent(props: moonProps),
                 kind: .clear,
                 isNight: false
             )
@@ -166,6 +160,10 @@ struct WeatherDetailsView: View {
     
     private var visProps: VisibilityProps {
         VisibilityPresenter.props(from: details.visibilityDetails)
+    }
+    
+    private var moonProps: WaxingCrescentProps {
+        MoonPresenter.props(from: details.moonDetails, calendar: calendar, locale: locale)
     }
     
     private var humidityProps: HumidityProps {

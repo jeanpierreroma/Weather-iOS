@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct WaxingCrescentInfoContent: InfoBlockContent {
-    var header = "Waxing crescent"
-    
-    var headerIconSystemName = "moonphase.waning.gibbous"
-    
+    var header: String { props.title }
+    var headerIconSystemName: String { props.symbolName }
+
     let props: WaxingCrescentProps
     
     var body: some View {
@@ -24,8 +23,7 @@ struct WaxingCrescentInfoContent: InfoBlockContent {
                 InfoTitleValueRow(title: "Next Full Moon", value: props.nextFullMoonText)
             }
             
-            Circle()
-                .frame(width: 110, height: 110)
+            MoonPicture(url: props.currentMoonPicture, size: 110)
         }
     }
 }
@@ -48,6 +46,48 @@ private struct InfoTitleValueRow: View {
     }
 }
 
+private struct MoonPicture: View {
+    let url: URL
+    var size: CGFloat = 110
+
+    var body: some View {
+        AsyncImage(url: url, transaction: .init(animation: .snappy(duration: 0.35))) { phase in
+            switch phase {
+            case .empty:
+                ZStack {
+                    Circle().fill(.white.opacity(0.08))
+                    ProgressView()
+                }
+                .frame(width: size, height: size)
+                .overlay(Circle().stroke(.white.opacity(0.15), lineWidth: 1))
+
+            case .success(let image):
+                image
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: size, height: size)
+                    .clipShape(Circle())
+                    .blendMode(.screen)
+
+            case .failure:
+                Image(systemName: "moon")
+                    .imageScale(.large)
+                    .frame(width: size, height: size)
+                    .background(Circle().fill(.white.opacity(0.08)))
+                    .overlay(Circle().stroke(.white.opacity(0.15), lineWidth: 1))
+                
+            @unknown default:
+                Image(systemName: "moon")
+                    .imageScale(.large)
+                    .frame(width: size, height: size)
+                    .background(Circle().fill(.white.opacity(0.08)))
+                    .overlay(Circle().stroke(.white.opacity(0.15), lineWidth: 1))
+            }
+        }
+        .accessibilityLabel("Current Moon picture")
+    }
+}
+
 #Preview {
     ZStack {
         LinearGradient(colors: [.indigo, .purple, .pink],
@@ -57,9 +97,12 @@ private struct InfoTitleValueRow: View {
         InfoBlock(
             content: WaxingCrescentInfoContent(
                 props: .init(
+                    title: "Waxing Crescent",
+                    symbolName: "moonphase.waxing.crescent",
                     illuminationText: "8%",
                     moonsetText: "18:17",
-                    nextFullMoonText: "12 days"
+                    nextFullMoonText: "12 days",
+                    currentMoonPicture: URL(string: "https://svs.gsfc.nasa.gov/vis/a000000/a005400/a005415/frames/730x730_1x1_30p/moon.7153.jpg")!
                 )
             ),
             kind: .clear,
