@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct SectionTitle: View {
+    let text: String
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text(text)
+            .font(.title3.weight(.semibold))
+            .padding(.top, 6)
     }
 }
 
 #Preview {
-    SectionTitle()
+    SectionTitle(text: "About the UV Index")
 }

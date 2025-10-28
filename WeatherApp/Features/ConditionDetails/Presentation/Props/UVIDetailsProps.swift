@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+struct UVIDetailsProps {
+    let points: [MetricPoint]
+    let currentValue: Int
+    let guidanceText: String
+    let todayPeak: Int
+    let yesterdayPeak: Int
+}
