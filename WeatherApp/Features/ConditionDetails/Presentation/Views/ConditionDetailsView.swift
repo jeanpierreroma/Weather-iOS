@@ -11,7 +11,8 @@ import Charts
 struct ConditionDetailsView: View {
     @State private var date: Date = .now
     
-    let props: UVIDetailsProps
+    let uviProps: UVIDetailsProps
+    let humidityProps: HumidityDetailsProps
     
     var body: some View {
         ScrollView {
@@ -20,29 +21,36 @@ struct ConditionDetailsView: View {
                 
                 Divider()
                 
-                UvTodaySection(
+//                UvTodaySection(
+//                    date: date,
+//                    currentValue: uviProps.currentValue,
+//                    points: uviProps.points,
+//                    guidanceText: uviProps.guidanceText,
+//                    todayPeak: uviProps.todayPeak,
+//                    yesterdayPeak: uviProps.yesterdayPeak
+//                )
+//                .padding(.horizontal)
+                
+                HumidityTodaySection(
                     date: date,
-                    currentValue: props.currentValue,
-                    points: props.points,
-                    guidanceText: props.guidanceText
+                    currentValue: humidityProps.currentValue,
+                    points: humidityProps.points,
+                    dailySummary: humidityProps.dailySummary,
+                    todayPeak: humidityProps.todayPeak,
+                    yesterdayPeak: humidityProps.yesterdayPeak
                 )
                 .padding(.horizontal)
-                
-                Divider()
-                
-                UvDailyComparisonSection(
-                    todayPeak: props.todayPeak,
-                    yesterdayPeak: props.yesterdayPeak
-                )
-                
-                UvAboutSection()
             }
         }
     }
 }
 
 #Preview {
-    let props: UVIDetailsProps = UVIDetailsPresenter.props()
+    let uviProps: UVIDetailsProps = UVIDetailsPresenter.props()
+    let humidityProps: HumidityDetailsProps = HumidityDetailsPresenter.props()
     
-    ConditionDetailsView(props: props)
+    ConditionDetailsView(
+        uviProps: uviProps,
+        humidityProps: humidityProps
+    )
 }
