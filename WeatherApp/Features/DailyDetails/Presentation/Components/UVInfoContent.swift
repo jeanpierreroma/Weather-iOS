@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct UVIndexInfoContent: InfoBlockContent {
+struct UVInfoContent: InfoBlockContent {
     var header = "UV Index"
     var headerIconSystemName = "sun.max"
     
@@ -56,7 +56,7 @@ struct UVIndexInfoContent: InfoBlockContent {
         .ignoresSafeArea()
 
         InfoBlock(
-            content: UVIndexInfoContent(
+            content: UVInfoContent(
                 props: .init(
                     valueText: "0",
                     valueNumber: 0,
