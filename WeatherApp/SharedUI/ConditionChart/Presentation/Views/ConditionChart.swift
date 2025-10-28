@@ -11,12 +11,18 @@ import Charts
 
 struct ConditionChart: View {
     @Environment(\.calendar) private var calendar
-
+    
+    enum TopAxisMode: Equatable {
+        case perHour
+        case averageByBucket(hours: Int)
+    }
+    
     let day: Date
     let points: [MetricPoint]
     let bands: [ChartBand]
     
     var yDomain: ClosedRange<Double>
+    var topAxisMode: TopAxisMode
     var yGridStep: Double = 1
     var maskBaseline: Double = -0.1
     
@@ -71,12 +77,18 @@ struct ConditionChart: View {
         .chartYScale(domain: yDomain)
         .chartXScale(domain: startOfDay...endOfDay)
         .chartXAxis {
-            AxisMarks(position: .top, values: hourTicks) { v in
+            AxisMarks(position: .top, values: topAxisTicks) { v in
                 AxisValueLabel {
-                    if let d = v.as(Date.self), let val = valueByHour[d] {
-                        Text("\(Int(round(val)))")
-                            .font(.caption2.weight(.semibold))
-                            .foregroundStyle(.secondary)
+                    if let d = v.as(Date.self), let val = topAxisValueAt[d] {
+                        if yGridStep.truncatingRemainder(dividingBy: 1) == 0 {
+                            Text("\(Int(round(val)))")
+                                .font(.caption2.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                        } else {
+                            Text(val.formatted(.number.precision(.fractionLength(0...1))))
+                                .font(.caption2.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 }
             }
@@ -95,7 +107,11 @@ struct ConditionChart: View {
                 AxisGridLine()
                 AxisValueLabel {
                     if let y = val.as(Double.self) {
-                        Text("\(Int(y))")
+                        if yGridStep.truncatingRemainder(dividingBy: 1) == 0 {
+                            Text("\(Int(y))")
+                        } else {
+                            Text(y.formatted(.number.precision(.fractionLength(0...2))))
+                        }
                     }
                 }
             }
@@ -104,7 +120,7 @@ struct ConditionChart: View {
     
     private var startOfDay: Date { calendar.startOfDay(for: day) }
     private var endOfDay: Date { calendar.date(byAdding: .day, value: 1, to: startOfDay)! }
-
+    
     private var edgeExtendedPoints: [MetricPoint] {
         let s = points.sorted { $0.date < $1.date }
         guard !s.isEmpty else { return [] }
@@ -120,10 +136,10 @@ struct ConditionChart: View {
     
     private var valueByHour: [Date: Double] {
         Dictionary(uniqueKeysWithValues:
-            points.map { p in
-                let h = calendar.date(from: calendar.dateComponents([.year,.month,.day,.hour], from: p.date))!
-                return (h, p.value)
-            }
+                    points.map { p in
+            let h = calendar.date(from: calendar.dateComponents([.year,.month,.day,.hour], from: p.date))!
+            return (h, p.value)
+        }
         )
     }
     
@@ -133,24 +149,81 @@ struct ConditionChart: View {
             .map { calendar.date(from: calendar.dateComponents([.year,.month,.day,.hour], from: $0.date))! }
     }
     
+    private var topAxisTicks: [Date] {
+        switch topAxisMode {
+        case .perHour:
+            return Array(Set(hourTicks)).sorted()
+        case .averageByBucket(let hours):
+            return bucketTicks(hours: hours)
+        }
+    }
+    
+    private var topAxisValueAt: [Date: Double] {
+        switch topAxisMode {
+        case .perHour:
+            return valueByHour
+        case .averageByBucket(let hours):
+            return bucketAverages(hours: hours)
+        }
+    }
+
+    private func bucketTicks(hours: Int) -> [Date] {
+        guard hours > 0 else { return [] }
+        var ticks: [Date] = []
+        var t = startOfDay
+        while t < endOfDay {
+            ticks.append(t)                     
+            t = calendar.date(byAdding: .hour, value: hours, to: t)!
+        }
+        return ticks
+    }
+
+    private func bucketStart(for date: Date, hours: Int) -> Date {
+        let comps = calendar.dateComponents([.year, .month, .day, .hour], from: date)
+        let h = comps.hour ?? 0
+        let startH = (h / hours) * hours
+        return calendar.date(from: .init(year: comps.year, month: comps.month, day: comps.day, hour: startH))!
+    }
+
+    private func bucketAverages(hours: Int) -> [Date: Double] {
+        guard hours > 0 else { return [:] }
+        var agg: [Date: (sum: Double, count: Int)] = [:]
+        for p in points {
+            let b = bucketStart(for: p.date, hours: hours)
+            let cur = agg[b] ?? (0, 0)
+            agg[b] = (cur.sum + p.value, cur.count + 1)
+        }
+        var res: [Date: Double] = [:]
+        for (k, v) in agg {
+            res[k] = v.count > 0 ? v.sum / Double(v.count) : .nan
+        }
+        return res
+    }
+    
     private var yGridValues: [Double] {
-        let lo = Int(ceil(yDomain.lowerBound))
-        let hi = Int(floor(yDomain.upperBound))
-        return (lo...hi).map(Double.init)
+        let lo = yDomain.lowerBound
+        let hi = yDomain.upperBound
+        let step = max(0.0001, yGridStep)
+        
+        let first = ceil(lo / step) * step
+        guard first <= hi else { return [hi] }
+        
+        return Array(stride(from: first, through: hi, by: step))
     }
 }
 
 #Preview {
-    let cal = Calendar.current
-    let base = cal.startOfDay(for: .now)
-    let hours = (0..<24).compactMap { cal.date(byAdding: .hour, value: $0, to: base) }
-    let values = hours.map { d -> Double in
-        // простенька "дзвіночком" форма для прикладу
-        let t = Double(cal.component(.hour, from: d))
-        return max(0, 2 + 2.5 * exp(-pow((t - 12)/4.0, 2)))
-    }
-    let pts = zip(hours, values).map { MetricPoint(date: $0.0, value: $0.1) }
+    let day: Date = .now
+    let points: [MetricPoint] = DemoData.mockUVIData()
+    let bands: [ChartBand] = UVIBands.standard
+    let yDomain: ClosedRange<Double> = 0...11
     
-    ConditionChart(day: .now, points: pts, bands: UVIBands.standard, yDomain: 0...11)
-        .padding()
+    ConditionChart(
+        day: day,
+        points: points,
+        bands: bands,
+        yDomain: yDomain,
+        topAxisMode: .perHour
+    )
+    .padding()
 }

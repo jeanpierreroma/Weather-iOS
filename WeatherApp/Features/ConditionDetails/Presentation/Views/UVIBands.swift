@@ -16,3 +16,12 @@ enum UVIBands {
         .init(10...11, color: .purple, id: "extreme")
     ]
 }
+
+enum HumidityBands {
+    static let standard: [ChartBand] = [
+        .init(0...30,    color: .yellow, id: "rh.01.dry"),
+        .init(30...60,   color: .green,  id: "rh.02.comfort"),
+        .init(60...80,   color: .orange, id: "rh.03.humid"),
+        .init(80...100,  color: .red,    id: "rh.04.oppressive")
+    ]
+}
