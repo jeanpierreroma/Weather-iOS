@@ -32,8 +32,7 @@ struct UVInfoContent: InfoBlockContent {
                 value: props.valueNumber,
                 indicatorStyle: .init(color: .white, diameter: 12, shadowRadius: 2, shadowOpacity: 0.45)
             )
-
-            Spacer()
+            .frame(height: 6)
 
             Text("Low for the rest of the day.")
                 .metricCaptionStyle()
