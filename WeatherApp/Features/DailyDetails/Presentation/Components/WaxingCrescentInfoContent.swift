@@ -59,15 +59,13 @@ private struct MoonPicture: View {
                     ProgressView()
                 }
                 .frame(width: size, height: size)
-                .overlay(Circle().stroke(.white.opacity(0.15), lineWidth: 1))
 
             case .success(let image):
-                image
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: size, height: size)
-                    .clipShape(Circle())
-                    .blendMode(.screen)
+                Image("Moon")
+                  .resizable()
+                  .scaledToFill()
+                  .frame(width: size, height: size)
+                  .clipShape(Circle())
 
             case .failure:
                 Image(systemName: "moon")
@@ -84,7 +82,6 @@ private struct MoonPicture: View {
                     .overlay(Circle().stroke(.white.opacity(0.15), lineWidth: 1))
             }
         }
-        .accessibilityLabel("Current Moon picture")
     }
 }
 

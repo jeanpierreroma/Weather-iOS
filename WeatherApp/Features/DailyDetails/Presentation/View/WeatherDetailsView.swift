@@ -19,6 +19,9 @@ struct WeatherDetailsView: View {
     private let vSpacing: CGFloat = 16
     private let hSpacing: CGFloat = 16
     
+    @State private var lastSizes: [String: CGSize] = [:]
+    @State private var uniformSize: CGSize = .zero
+    @State private var uniformFrozen = false
     
     init(
         details: WeatherDetails,
@@ -37,16 +40,20 @@ struct WeatherDetailsView: View {
                 kind: .clear,
                 isNight: false
             )
+            .measureBlock("ForecastStrip")
+            
             InfoBlock(
                 content: DaysForecastView(daily: daily),
                 kind: .clear,
                 isNight: false
             )
+            
             InfoBlock(
                 content: AirQualityInfoContent(props: airQualityProps),
                 kind: .clear,
                 isNight: false
             )
+            .measureBlock("AirQuality")
             
             HStack(spacing: hSpacing) {
                 InfoBlock(
@@ -55,6 +62,7 @@ struct WeatherDetailsView: View {
                     isNight: false
                 )
                 .frame(maxWidth: .infinity)
+                .measureBlock("FeelsLike")
                 
                 InfoBlock(
                     content: AveragesInfoContent(
@@ -69,6 +77,7 @@ struct WeatherDetailsView: View {
                     isNight: false
                 )
                 .frame(maxWidth: .infinity)
+                .measureBlock("Averages")
             }
             
             InfoBlock(
@@ -76,14 +85,16 @@ struct WeatherDetailsView: View {
                 kind: .clear,
                 isNight: false
             )
+            .measureBlock("Wind")
             
             HStack(spacing: hSpacing) {
                 InfoBlock(
-                    content: UVIndexInfoContent(props: uvProps),
+                    content: UVInfoContent(props: uvProps),
                     kind: .clear,
                     isNight: false
                 )
                 .frame(maxWidth: .infinity)
+                .measureBlock("UVIndex")
                 
                 InfoBlock(
                     content: SunsetInfoContent(props: sunProps),
@@ -91,6 +102,7 @@ struct WeatherDetailsView: View {
                     isNight: false
                 )
                 .frame(maxWidth: .infinity)
+                .measureBlock("Sunset")
             }
             
             HStack(spacing: hSpacing) {
@@ -99,14 +111,14 @@ struct WeatherDetailsView: View {
                     kind: .clear,
                     isNight: false
                 )
-                .frame(maxWidth: .infinity)
+                .measureBlock("Precipitation")
                 
                 InfoBlock(
                     content: VisibilityInfoContent(props: visProps),
                     kind: .clear,
                     isNight: false
                 )
-                .frame(maxWidth: .infinity)
+                .measureBlock("Visibility")
             }
             
             InfoBlock(
@@ -114,6 +126,7 @@ struct WeatherDetailsView: View {
                 kind: .clear,
                 isNight: false
             )
+            .measureBlock("Moon")
             
             HStack(spacing: hSpacing) {
                 InfoBlock(
@@ -121,16 +134,39 @@ struct WeatherDetailsView: View {
                     kind: .clear,
                     isNight: false
                 )
-                .frame(maxWidth: .infinity)
+                
+                .measureBlock("Humidity")
                 
                 InfoBlock(
                     content: PressureInfoContent(currentPressure: 996),
                     kind: .clear,
                     isNight: false
                 )
-                .frame(maxWidth: .infinity)
+                .frame(width: 177, height: 177)
+                .measureBlock("Pressure")
             }
 
+        }
+        .onPreferenceChange(BlockSizeKey.self) { sizes in
+            for (id, newSize) in sizes {
+                let old = lastSizes[id]
+                if old != newSize {
+                    print("[\(id)] \(Int(newSize.width)) × \(Int(newSize.height))")
+                    lastSizes[id] = newSize
+                }
+            }
+            
+            guard !uniformFrozen else { return }
+
+            let maxW = sizes.values.map(\.width).max() ?? 0
+            let maxH = sizes.values.map(\.height).max() ?? 0
+            let candidate = CGSize(width: ceil(maxW), height: ceil(maxH))
+
+            if candidate.width > 0 && candidate.height > 0 {
+                uniformSize = candidate
+                uniformFrozen = true
+                print("[Uniform] freeze \(Int(candidate.width)) × \(Int(candidate.height))")
+            }
         }
     }
     
@@ -225,5 +261,30 @@ struct WeatherDetailsView: View {
             daily: daily
         )
         .padding(.horizontal)
+    }
+}
+
+private struct BlockSizeKey: PreferenceKey {
+    static var defaultValue: [String: CGSize] = [:]
+    static func reduce(value: inout [String: CGSize], nextValue: () -> [String: CGSize]) {
+        value.merge(nextValue(), uniquingKeysWith: { $1 })
+    }
+}
+
+private struct MeasureBlock: ViewModifier {
+    let id: String
+    func body(content: Content) -> some View {
+        content.background(
+            GeometryReader { proxy in
+                Color.clear
+                    .preference(key: BlockSizeKey.self, value: [id: proxy.size])
+            }
+        )
+    }
+}
+
+extension View {
+    func measureBlock(_ id: String) -> some View {
+        modifier(MeasureBlock(id: id))
     }
 }

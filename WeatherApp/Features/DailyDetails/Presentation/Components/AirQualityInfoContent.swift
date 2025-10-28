@@ -10,6 +10,7 @@ import SwiftUI
 struct AirQualityInfoContent: InfoBlockContent {
     let header: String = "Air Quality"
     let headerIconSystemName: String = "aqi.low"
+    
 
     let props: AirQualityProps
 
@@ -31,8 +32,7 @@ struct AirQualityInfoContent: InfoBlockContent {
                 value: props.valueNumber,
                 indicatorStyle: .init(color: .white, diameter: 12, shadowRadius: 2, shadowOpacity: 0.5)
             )
-
-            Spacer()
+            .frame(height: 6)
 
             Text(props.summary)
                 .metricCaptionStyle()

@@ -76,7 +76,7 @@ private extension MoonPresenter {
         let steps = upper - base
         let index = Int((Double(steps) * clampedFraction).rounded())
         let imageNumber = min(base + index, upper)
-        let urlString = String(format: "https://svs.gsfc.nasa.gov/vis/a000000/a005400/a005415/frames/730x730_1x1_30p/moon.%04d.jpg", imageNumber)
+        let urlString = String(format: "https://svs.gsfc.nasa.gov/vis/a000000/a005400/a005416/frames/730x730_1x1_30p/moon.7473.jpg", imageNumber)
         return URL(string: urlString)!
     }
 

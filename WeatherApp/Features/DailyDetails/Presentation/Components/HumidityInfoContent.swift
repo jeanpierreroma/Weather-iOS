@@ -21,6 +21,7 @@ struct HumidityInfoContent: InfoBlockContent {
             Text(props.summaryText)
                 .metricCaptionStyle()
         }
+//        .frame(minWidth: 177, minHeight: 177)
     }
 }
 
