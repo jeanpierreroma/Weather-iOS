@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+struct VisibilityDetailsProps {
+    let points: [MetricPoint]
+    let currentValue: Int
+    let dailySummary: String
+    let todayPeak: Int
+    let yesterdayPeak: Int
+}
