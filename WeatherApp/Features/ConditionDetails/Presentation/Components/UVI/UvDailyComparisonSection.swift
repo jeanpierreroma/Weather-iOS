@@ -26,9 +26,7 @@ struct UvDailyComparisonSection: View {
                 LabeledBar(label: "Today",     value: Double(todayPeak),     maxValue: maxScale, highlight: true)
                 LabeledBar(label: "Yesterday", value: Double(yesterdayPeak), maxValue: maxScale)
             }
-        }
-        .padding(.horizontal)
-        
+        }        
     }
 }
 

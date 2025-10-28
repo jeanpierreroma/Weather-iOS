@@ -19,7 +19,6 @@ struct UvAboutSection: View {
     """)
             }
         }
-        .padding(.horizontal)
     }
 }
 
