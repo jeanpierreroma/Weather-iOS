@@ -13,6 +13,8 @@ struct ConditionDetailsView: View {
     
     let uviProps: UVIDetailsProps
     let humidityProps: HumidityDetailsProps
+    let visibilityProps: VisibilityDetailsProps
+    let pressureProps: PressureDetailsProps
     
     var body: some View {
         ScrollView {
@@ -31,13 +33,31 @@ struct ConditionDetailsView: View {
 //                )
 //                .padding(.horizontal)
                 
-                HumidityTodaySection(
+//                HumidityTodaySection(
+//                    date: date,
+//                    currentValue: humidityProps.currentValue,
+//                    points: humidityProps.points,
+//                    dailySummary: humidityProps.dailySummary,
+//                    todayPeak: humidityProps.todayPeak,
+//                    yesterdayPeak: humidityProps.yesterdayPeak
+//                )
+//                .padding(.horizontal)
+                
+//                VisibilityTodaySection(
+//                    date: date,
+//                    currentValue: visibilityProps.currentValue,
+//                    points: visibilityProps.points,
+//                    dailySummary: visibilityProps.dailySummary,
+//                    todayPeak: visibilityProps.todayPeak,
+//                    yesterdayPeak: visibilityProps.yesterdayPeak
+//                )
+//                .padding(.horizontal)
+                
+                PressureTodaySection(
                     date: date,
-                    currentValue: humidityProps.currentValue,
-                    points: humidityProps.points,
-                    dailySummary: humidityProps.dailySummary,
-                    todayPeak: humidityProps.todayPeak,
-                    yesterdayPeak: humidityProps.yesterdayPeak
+                    currentValue: pressureProps.currentValue,
+                    points: pressureProps.points,
+                    dailySummary: pressureProps.dailySummary
                 )
                 .padding(.horizontal)
             }
@@ -48,9 +68,13 @@ struct ConditionDetailsView: View {
 #Preview {
     let uviProps: UVIDetailsProps = UVIDetailsPresenter.props()
     let humidityProps: HumidityDetailsProps = HumidityDetailsPresenter.props()
+    let visibilityProps: VisibilityDetailsProps = VisibilityDetailsPresenter.props()
+    let pressureProps: PressureDetailsProps = PressureDetailsPresenter.props()
     
     ConditionDetailsView(
         uviProps: uviProps,
-        humidityProps: humidityProps
+        humidityProps: humidityProps,
+        visibilityProps: visibilityProps,
+        pressureProps: pressureProps
     )
 }
