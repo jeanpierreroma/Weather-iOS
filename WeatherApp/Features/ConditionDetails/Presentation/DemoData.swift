@@ -37,4 +37,36 @@ enum DemoData {
 
         return zip(hours, values).map { MetricPoint(date: $0.0, value: $0.1) }
     }
+    
+    static func mockVisibilityData() -> [MetricPoint] {
+        let cal   = Calendar.current
+        let start = cal.startOfDay(for: .now)
+        let hours = (0..<24).compactMap { cal.date(byAdding: .hour, value: $0, to: start) }
+
+        let values: [Double] = [
+            3.0, 3.2, 3.5, 4.0, 5.0, 7.5,
+            10.0, 13.0, 16.0, 18.5, 20.0, 20.0,
+            19.0, 18.0, 17.0, 16.0, 14.5, 12.0,
+            10.0, 8.5, 7.0, 6.0, 5.0, 4.0
+        ]
+
+        return zip(hours, values).map { MetricPoint(date: $0.0, value: $0.1) }
+    }
+
+    /// Тиск, hPa (плавна добова варіація навколо ~1013 hPa)
+    static func mockPressureDataHpa() -> [MetricPoint] {
+        let cal   = Calendar.current
+        let start = cal.startOfDay(for: .now)
+        let hours = (0..<24).compactMap { cal.date(byAdding: .hour, value: $0, to: start) }
+
+        let values: [Double] = [
+            1012.80, 1012.60, 1012.40, 1012.30, 1012.35, 1012.50,
+            1012.75, 1013.00, 1013.25, 1013.45, 1013.60, 1013.65,
+            1013.60, 1013.45, 1013.25, 1013.00, 1012.80, 1012.65,
+            1012.55, 1012.50, 1012.55, 1012.70, 1012.90, 1013.00
+        ]
+
+        return zip(hours, values).map { MetricPoint(date: $0.0, value: $0.1) }
+    }
+
 }
