@@ -7,9 +7,10 @@
 
 
 import SwiftUI
-import Charts
 
-enum TopAxisMode: Equatable {
+enum TopAxisMode {
     case perHour
     case averageByBucket(hours: Int)
+    case custom(ticks: [Date], label: (Date) -> TopAxisLabel?)
 }
+

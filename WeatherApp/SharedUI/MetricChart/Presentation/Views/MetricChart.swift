@@ -170,7 +170,6 @@ struct MetricChart: View {
                 let y = value(at: cut)
                 let c = color(for: y)
 
-                // м'яке «сяйво»
                 PointMark(
                     x: .value("t", cut),
                     y: .value("val", y)
@@ -179,7 +178,6 @@ struct MetricChart: View {
                 .foregroundStyle(c.opacity(0.20))
                 .zIndex(10)
 
-                // сама точка
                 PointMark(
                     x: .value("t", cut),
                     y: .value("val", y)
@@ -188,7 +186,6 @@ struct MetricChart: View {
                 .foregroundStyle(c)
                 .zIndex(11)
 
-                // білий обвід для контрасту
                 PointMark(
                     x: .value("t", cut),
                     y: .value("val", y)
@@ -207,14 +204,25 @@ struct MetricChart: View {
         .chartXAxis {
             AxisMarks(position: .top, values: topAxisTicks) { v in
                 AxisValueLabel {
-                    if let d = v.as(Date.self), let val = topAxisValueAt[d] {
-                        if yGridStep.truncatingRemainder(dividingBy: 1) == 0 {
-                            Text("\(Int(round(val)))")
+                    if let d = v.as(Date.self), let label = topAxisLabel(at: d) {
+                        switch label {
+                        case .number(let val):
+                            if yGridStep.truncatingRemainder(dividingBy: 1) == 0 {
+                                Text("\(Int(round(val)))")
+                                    .font(.caption2.weight(.semibold))
+                                    .foregroundStyle(.secondary)
+                            } else {
+                                Text(val.formatted(.number.precision(.fractionLength(0...1))))
+                                    .font(.caption2.weight(.semibold))
+                                    .foregroundStyle(.secondary)
+                            }
+                        case .text(let s):
+                            Text(s)
                                 .font(.caption2.weight(.semibold))
                                 .foregroundStyle(.secondary)
-                        } else {
-                            Text(val.formatted(.number.precision(.fractionLength(0...1))))
-                                .font(.caption2.weight(.semibold))
+                        case .symbol(let name):
+                            Image(systemName: name)
+                                .imageScale(.small)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -283,15 +291,32 @@ struct MetricChart: View {
             return Array(Set(hourTicks)).sorted()
         case .averageByBucket(let hours):
             return bucketTicks(hours: hours)
+        case .custom(let ticks, _):
+            return ticks.sorted()
         }
     }
     
-    private var topAxisValueAt: [Date: Double] {
+//    private var topAxisValueAt: [Date: Double] {
+//        switch topAxisMode {
+//        case .perHour:
+//            return valueByHour
+//        case .averageByBucket(let hours):
+//            return bucketAverages(hours: hours)
+//        }
+//    }
+    
+    private func topAxisLabel(at d: Date) -> TopAxisLabel? {
         switch topAxisMode {
         case .perHour:
-            return valueByHour
+            if let v = valueByHour[d] { return .number(v) }
+            return nil
         case .averageByBucket(let hours):
-            return bucketAverages(hours: hours)
+            // беремо середнє саме для початку «кошика»
+            let b = bucketStart(for: d, hours: hours)
+            if let v = bucketAverages(hours: hours)[b] { return .number(v) }
+            return nil
+        case .custom(_, let provider):
+            return provider(d)
         }
     }
 
