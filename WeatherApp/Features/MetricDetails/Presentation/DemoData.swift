@@ -100,6 +100,52 @@ enum DemoData {
         return zip(hours, values).map { MetricPoint(date: $0.0, value: $0.1) }
     }
     
+    static func mockWeatherSymbolsByHour(
+        temperature: [MetricPoint] = mockTemperatureDataCelsius(),
+        precipProb:  [MetricPoint] = mockPrecipitationProbabilityData()
+    ) -> [Date: String] {
+        let cal = Calendar.current
+
+        func hourKey(_ d: Date) -> Date {
+            cal.date(from: cal.dateComponents([.year, .month, .day, .hour], from: d))!
+        }
+
+        let tByHour = Dictionary(uniqueKeysWithValues: temperature.map { (hourKey($0.date), $0.value) })
+        let pByHour = Dictionary(uniqueKeysWithValues: precipProb.map   { (hourKey($0.date), $0.value) })
+
+        let allHours = Set(tByHour.keys).union(pByHour.keys)
+        var result: [Date: String] = [:]
+
+        for h in allHours {
+            let hour = cal.component(.hour, from: h)
+            let isNight = hour < 6 || hour >= 21
+            let t  = tByHour[h] ?? 10
+            let pp = pByHour[h] ?? 0
+
+            let symbol: String
+            if pp >= 80 {
+                symbol = "cloud.heavyrain.fill"
+            } else if pp >= 50 {
+                symbol = "cloud.rain.fill"
+            } else if pp >= 20 {
+                symbol = "cloud.drizzle.fill"
+            } else {
+                if isNight {
+                    if t <= 2 { symbol = "cloud.moon.fill" }
+                    else      { symbol = "moon.stars.fill" }
+                } else {
+                    if t >= 16 { symbol = "sun.max.fill" }
+                    else if t >= 10 { symbol = "cloud.sun.fill" }
+                    else { symbol = "cloud.fill" }
+                }
+            }
+
+            result[h] = symbol
+        }
+
+        return result
+    }
+    
     /// Feels Like, °C (трохи нижча вночі через вітер, трохи вища опівдні через сонце)
     static func mockFeelsLikeTemperatureDataCelsius() -> [MetricPoint] {
         let cal   = Calendar.current

@@ -17,15 +17,22 @@ struct HumidityTodaySection: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            MetricChart(day: date, points: points, bands: HumidityBands.standard, yDomain: 0...100, topAxisMode: .averageByBucket(hours: 6), yGridStep: 20)
-                .padding(.trailing)
-                .padding(.top, 8)
-                .padding(.bottom, 4)
-                .frame(height: 320)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(style: StrokeStyle(lineWidth: 0.1))
-                )
+            MetricChart(
+                day: date,
+                points: points,
+                bands: HumidityBands.standard,
+                yDomain: 0...100,
+                topAxisMode: .averageByBucket(hours: 6),
+                yGridStep: 20
+            )
+            .padding(.trailing)
+            .padding(.top, 8)
+            .padding(.bottom, 4)
+            .frame(height: 320)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(style: StrokeStyle(lineWidth: 0.1))
+            )
             
             HumidityDailySummarySection(dailySummary: dailySummary)
             

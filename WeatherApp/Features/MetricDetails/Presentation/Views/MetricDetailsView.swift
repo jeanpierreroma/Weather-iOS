@@ -93,7 +93,8 @@ struct MetricDetailsView: View {
                         ConditionsTodaySection(
                             temperaturePoint: DemoData.mockTemperatureDataCelsius(),
                             feelsLikePoint: DemoData.mockFeelsLikeTemperatureDataCelsius(),
-                            precipitationProbabilityPoint: DemoData.mockPrecipitationProbabilityData()
+                            precipitationProbabilityPoint: DemoData.mockPrecipitationProbabilityData(),
+                            weatherSymbolsByHour: DemoData.mockWeatherSymbolsByHour()
                         )
                     case .uvi:
                         UvTodaySection(
