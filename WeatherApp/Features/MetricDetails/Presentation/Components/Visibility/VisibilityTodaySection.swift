@@ -17,7 +17,7 @@ struct VisibilityTodaySection: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            ConditionChart(day: date, points: points, bands: VisibilityBands.standard, yDomain: 0...50, topAxisMode: .averageByBucket(hours: 2), yGridStep: 5)
+            MetricChart(day: date, points: points, bands: VisibilityBands.standard, yDomain: 0...50, topAxisMode: .averageByBucket(hours: 2), yGridStep: 5)
                 .padding(.trailing)
                 .padding(.top, 8)
                 .padding(.bottom, 4)

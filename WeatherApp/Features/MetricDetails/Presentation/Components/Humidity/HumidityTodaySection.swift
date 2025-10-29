@@ -17,7 +17,7 @@ struct HumidityTodaySection: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            ConditionChart(day: date, points: points, bands: HumidityBands.standard, yDomain: 0...100, topAxisMode: .averageByBucket(hours: 6), yGridStep: 20)
+            MetricChart(day: date, points: points, bands: HumidityBands.standard, yDomain: 0...100, topAxisMode: .averageByBucket(hours: 6), yGridStep: 20)
                 .padding(.trailing)
                 .padding(.top, 8)
                 .padding(.bottom, 4)

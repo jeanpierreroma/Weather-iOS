@@ -11,12 +11,7 @@ import Charts
 
 struct MetricChart: View {
     @Environment(\.calendar) private var calendar
-    
-    enum TopAxisMode: Equatable {
-        case perHour
-        case averageByBucket(hours: Int)
-    }
-    
+
     let day: Date
     let points: [MetricPoint]
     let bands: [ChartBand]
@@ -26,45 +21,142 @@ struct MetricChart: View {
     var yGridStep: Double = 1
     var maskBaseline: Double = -0.1
     
+    private let solidStyle  = StrokeStyle(lineWidth: 4, lineCap: .round)
+    private let dashedStyle = StrokeStyle(lineWidth: 4, lineCap: .round, dash: [6, 8])
+    
+    private let pastFillOpacity   = 0.28
+    private let futureFillOpacity = 0.56
+    private let pastLineOpacity   = 0.65
+    private let futureLineOpacity = 1.00
+    
     var body: some View {
         Chart {
-            ForEach(bands) { band in
-                RectangleMark(
-                    xStart: .value("from", startOfDay),
-                    xEnd:   .value("to",   endOfDay),
-                    yStart: .value("y0", band.range.lowerBound),
-                    yEnd:   .value("y1", band.range.upperBound)
-                )
-                .foregroundStyle(band.color.opacity(0.22))
-            }
-            .mask {
-                ForEach(edgeExtendedPoints) { p in
-                    AreaMark(
-                        x: .value("t", p.date),
-                        yStart: .value("y0", yDomain.lowerBound + maskBaseline),
-                        yEnd: .value("y1", p.value)
+            if let cut = splitX {
+                // MARK: Area
+                ForEach(bands) { band in
+                    RectangleMark(
+                        xStart: .value("from", startOfDay),
+                        xEnd:   .value("to",   endOfDay),
+                        yStart: .value("y0", band.range.lowerBound),
+                        yEnd:   .value("y1", band.range.upperBound)
                     )
-                    .interpolationMethod(.monotone)
+                    .foregroundStyle(band.color.opacity(pastFillOpacity))
                 }
-            }
-            
-            ForEach(bands) { band in
-                RectangleMark(
-                    xStart: .value("from", startOfDay),
-                    xEnd:   .value("to",   endOfDay),
-                    yStart: .value("y0", band.range.lowerBound + maskBaseline),
-                    yEnd:   .value("y1", band.range.upperBound)
-                )
-                .foregroundStyle(band.color)
-            }
-            .mask {
-                ForEach(edgeExtendedPoints) { p in
-                    LineMark(
-                        x: .value("t", p.date),
-                        y: .value("val", p.value)
+                .mask {
+                    ForEach(pastPointsWithCut) { p in
+                        AreaMark(
+                            x: .value("t", p.date),
+                            yStart: .value("y0", yDomain.lowerBound + maskBaseline),
+                            yEnd: .value("y1", p.value)
+                        )
+                        .interpolationMethod(.monotone)
+                    }
+                    .foregroundStyle(by: .value("current", Date()))
+                }
+                
+                ForEach(bands) { band in
+                    RectangleMark(
+                        xStart: .value("from", startOfDay),
+                        xEnd:   .value("to",   endOfDay),
+                        yStart: .value("y0", band.range.lowerBound),
+                        yEnd:   .value("y1", band.range.upperBound)
                     )
-                    .interpolationMethod(.monotone)
-                    .lineStyle(.init(lineWidth: 4))
+                    .foregroundStyle(band.color.opacity(futureFillOpacity))
+                }
+                .mask {
+                    ForEach(futurePointsWithCut) { p in
+                        AreaMark(
+                            x: .value("t", p.date),
+                            yStart: .value("y0", yDomain.lowerBound + maskBaseline),
+                            yEnd: .value("y1", p.value)
+                        )
+                        .interpolationMethod(.monotone)
+                    }
+                    .foregroundStyle(by: .value("current", Date()))
+                }
+                
+                // MARK: Line
+                ForEach(bands) { band in
+                    RectangleMark(
+                        xStart: .value("from", startOfDay),
+                        xEnd:   .value("to",   cut),
+                        yStart: .value("y0", band.range.lowerBound + maskBaseline),
+                        yEnd:   .value("y1", band.range.upperBound)
+                    )
+                    .foregroundStyle(band.color.opacity(pastLineOpacity))
+                }
+                .mask {
+                    ForEach(pastPointsWithCut) { p in
+                        LineMark(
+                            x: .value("t", p.date),
+                            y: .value("val", p.value)
+                        )
+                        .interpolationMethod(.monotone)
+                        .lineStyle(dashedStyle)
+                    }
+                    .foregroundStyle(by: .value("current", Date()))
+                }
+                
+                
+                ForEach(bands) { band in
+                    RectangleMark(
+                        xStart: .value("from", cut),
+                        xEnd:   .value("to", endOfDay),
+                        yStart: .value("y0", band.range.lowerBound + maskBaseline),
+                        yEnd:   .value("y1", band.range.upperBound)
+                    )
+                    .foregroundStyle(band.color.opacity(futureLineOpacity))
+                }
+                .mask {
+                    ForEach(futurePointsWithCut) { p in
+                        LineMark(
+                            x: .value("t", p.date),
+                            y: .value("val", p.value)
+                        )
+                        .interpolationMethod(.monotone)
+                        .lineStyle(solidStyle)
+                    }
+                    .foregroundStyle(by: .value("current", Date()))
+                }
+            } else {
+                ForEach(bands) { band in
+                    RectangleMark(
+                        xStart: .value("from", startOfDay),
+                        xEnd:   .value("to",   endOfDay),
+                        yStart: .value("y0", band.range.lowerBound),
+                        yEnd:   .value("y1", band.range.upperBound)
+                    )
+                    .foregroundStyle(band.color.opacity(0.22))
+                }
+                .mask {
+                    ForEach(edgeExtendedPoints) { p in
+                        AreaMark(
+                            x: .value("t", p.date),
+                            yStart: .value("y0", yDomain.lowerBound + maskBaseline),
+                            yEnd: .value("y1", p.value)
+                        )
+                        .interpolationMethod(.monotone)
+                    }
+                }
+                
+                ForEach(bands) { band in
+                    RectangleMark(
+                        xStart: .value("from", startOfDay),
+                        xEnd:   .value("to",   endOfDay),
+                        yStart: .value("y0", band.range.lowerBound + maskBaseline),
+                        yEnd:   .value("y1", band.range.upperBound)
+                    )
+                    .foregroundStyle(band.color)
+                }
+                .mask {
+                    ForEach(edgeExtendedPoints) { p in
+                        LineMark(
+                            x: .value("t", p.date),
+                            y: .value("val", p.value)
+                        )
+                        .interpolationMethod(.monotone)
+                        .lineStyle(.init(lineWidth: 4))
+                    }
                 }
             }
             
@@ -72,6 +164,42 @@ struct MetricChart: View {
                 RuleMark(x: .value("Now", Date()))
                     .lineStyle(.init(lineWidth: 1))
                     .foregroundStyle(.secondary)
+            }
+            
+            if let cut = splitX {
+                let y = value(at: cut)
+                let c = color(for: y)
+
+                // м'яке «сяйво»
+                PointMark(
+                    x: .value("t", cut),
+                    y: .value("val", y)
+                )
+                .symbolSize(140)
+                .foregroundStyle(c.opacity(0.20))
+                .zIndex(10)
+
+                // сама точка
+                PointMark(
+                    x: .value("t", cut),
+                    y: .value("val", y)
+                )
+                .symbolSize(64)
+                .foregroundStyle(c)
+                .zIndex(11)
+
+                // білий обвід для контрасту
+                PointMark(
+                    x: .value("t", cut),
+                    y: .value("val", y)
+                )
+                .symbol(
+                    Circle()
+                        .strokeBorder(lineWidth: 2)
+                )
+                .foregroundStyle(.white)
+                .symbolSize(68)
+                .zIndex(12)
             }
         }
         .chartYScale(domain: yDomain)
@@ -209,6 +337,62 @@ struct MetricChart: View {
         guard first <= hi else { return [hi] }
         
         return Array(stride(from: first, through: hi, by: step))
+    }
+    
+    private var isToday: Bool {
+        calendar.isDate(day, inSameDayAs: Date())
+    }
+    
+    private var splitX: Date? {
+        guard isToday else { return nil }
+        let now = Date()
+        let r = min(max(now, startOfDay), endOfDay)
+        print(r == startOfDay)
+        print(r == now)
+        print(r == endOfDay)
+        
+        return r
+    }
+    
+    private func value(at t: Date) -> Double {
+        let d = edgeExtendedPoints
+        guard let first = d.first, let last = d.last else { return .nan }
+        if t <= first.date { return first.value }
+        if t >= last.date  { return last.value }
+        for i in 1..<d.count {
+            let p0 = d[i - 1], p1 = d[i]
+            if p0.date <= t && t <= p1.date {
+                let dt = p1.date.timeIntervalSince(p0.date)
+                guard dt > 0 else { return p1.value }
+                let k = t.timeIntervalSince(p0.date) / dt
+                return p0.value + (p1.value - p0.value) * k
+            }
+        }
+        return last.value
+    }
+
+    private var pastPointsWithCut: [MetricPoint] {
+        guard let cut = splitX else { return edgeExtendedPoints }
+        var pts = edgeExtendedPoints.filter { $0.date <= cut }
+        if pts.last?.date != cut {
+            pts.append(.init(date: cut, value: value(at: cut)))
+        }
+        return pts
+    }
+    private var futurePointsWithCut: [MetricPoint] {
+        guard let cut = splitX else { return [] }
+        var pts = edgeExtendedPoints.filter { $0.date >= cut }
+        if pts.first?.date != cut {
+            pts.insert(.init(date: cut, value: value(at: cut)), at: 0)
+        }
+        return pts
+    }
+    
+    private func color(for value: Double) -> Color {
+        if let band = bands.first(where: { $0.range.contains(value) }) {
+            return band.color
+        }
+        return .accentColor
     }
 }
 

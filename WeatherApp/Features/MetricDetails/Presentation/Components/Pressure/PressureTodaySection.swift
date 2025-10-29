@@ -15,7 +15,7 @@ struct PressureTodaySection: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            ConditionChart(day: date, points: points, bands: PressureBands.standard, yDomain: 930...1100, topAxisMode: .averageByBucket(hours: 6), yGridStep: 15)
+            MetricChart(day: date, points: points, bands: PressureBands.standard, yDomain: 930...1100, topAxisMode: .averageByBucket(hours: 6), yGridStep: 15)
                 .padding(.trailing)
                 .padding(.top, 8)
                 .padding(.bottom, 4)

@@ -61,7 +61,7 @@ struct ConditionsTodaySection: View {
     var body: some View {
         VStack(alignment: .leading) {
             VStack(alignment: .leading, spacing: 8) {
-                ConditionChart(
+                MetricChart(
                     day: date,
                     points: currentPoints,
                     bands: TemperatureBands.standard,
@@ -104,7 +104,7 @@ struct ConditionsTodaySection: View {
                         .font(.footnote)
                 }
                 
-                ConditionChart(day: date, points: precipitationProbabilityPoint, bands: PrecipitationProbabilityBands.standard, yDomain: 0...100, topAxisMode: .averageByBucket(hours: 0), yGridStep: 20)
+                MetricChart(day: date, points: precipitationProbabilityPoint, bands: PrecipitationProbabilityBands.standard, yDomain: 0...100, topAxisMode: .averageByBucket(hours: 0), yGridStep: 20)
                     .padding(.trailing)
                     .padding(.top, 8)
                     .padding(.bottom, 4)

@@ -17,7 +17,7 @@ struct UvTodaySection: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            ConditionChart(day: date, points: points, bands: UVIBands.standard, yDomain: 0...11, topAxisMode: .perHour)
+            MetricChart(day: date, points: points, bands: UVIBands.standard, yDomain: 0...11, topAxisMode: .perHour)
                 .padding(.trailing)
                 .padding(.top, 8)
                 .padding(.bottom, 4)
