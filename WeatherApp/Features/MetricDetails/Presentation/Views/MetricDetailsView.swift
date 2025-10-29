@@ -10,7 +10,7 @@ import Charts
 
 struct MetricDetailsView: View {
     @State private var date: Date = .now
-    @State private var tab: ConditionTab = .uvi
+    @State private var tab: ConditionTab = .conditions
     @Environment(\.horizontalSizeClass) private var hSize
     
     let uviProps: UVIDetailsProps
@@ -29,6 +29,8 @@ struct MetricDetailsView: View {
                     // Header
                     Group {
                         switch tab {
+                        case .conditions:
+                            MetricHeader(value: 11, unit: "°", description: "Actual temperature")
                         case .uvi:
                             MetricHeader(
                                 value: uviProps.currentValue,
@@ -87,6 +89,12 @@ struct MetricDetailsView: View {
                 
                 Group {
                     switch tab {
+                    case .conditions:
+                        ConditionsTodaySection(
+                            temperaturePoint: DemoData.mockTemperatureDataCelsius(),
+                            feelsLikePoint: DemoData.mockFeelsLikeTemperatureDataCelsius(),
+                            precipitationProbabilityPoint: DemoData.mockPrecipitationProbabilityData()
+                        )
                     case .uvi:
                         UvTodaySection(
                             date: date,

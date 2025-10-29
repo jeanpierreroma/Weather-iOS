@@ -46,3 +46,26 @@ enum PressureBands {
         .init(1040...1100, color: .purple.opacity(0.70), id: "press.06.veryHigh")
     ]
 }
+
+enum TemperatureBands {
+    static let standard: [ChartBand] = [
+        .init((-40)...(-20),    color: .purple, id: "temperature.01.veryCold"),
+        .init((-20)...0,        color: .blue, id: "temperature.02.cold"),
+        .init(0...10,           color: .cyan, id: "temperature.03.cool"),
+        .init(10...20,          color: .green, id: "temperature.04.warm"),
+        .init(20...30,          color: .yellow, id: "temperature.05.hot"),
+        .init(30...55,          color: .orange, id: "temperature.06.veryHot"),
+        .init(55...70,          color: .red, id: "temperature.07.extremelyHot"),
+    ]
+}
+
+enum PrecipitationProbabilityBands {
+    static let standard: [ChartBand] = [
+        .init(0...10,    color: .blue.opacity(0.12), id: "pop.01.veryLow"),
+        .init(10...30,   color: .blue.opacity(0.18), id: "pop.02.low"),
+        .init(30...50,   color: .blue.opacity(0.26), id: "pop.03.moderate"),
+        .init(50...70,   color: .blue.opacity(0.34), id: "pop.04.high"),
+        .init(70...90,   color: .blue.opacity(0.46), id: "pop.05.veryHigh"),
+        .init(90...100,  color: .blue.opacity(0.60), id: "pop.06.extreme")
+    ]
+}

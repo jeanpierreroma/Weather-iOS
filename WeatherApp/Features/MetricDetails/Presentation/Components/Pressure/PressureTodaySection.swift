@@ -26,8 +26,13 @@ struct PressureTodaySection: View {
                 )
             
             PressureDailySummarySection(dailySummary: dailySummary)
-            
-            PressureAboutSection()
+                        
+            MetricAboutSection(
+                title: "About Pressure",
+                text: """
+    Significant, rapid changes in pressure are used to predict changes in the weather. For example, a drop in pressure can mean that rain or snow is on the way, and rising pressure can mean that weather will improve. Pressure is also called barometric pressure or atmospheric pressure.
+    """
+            )
         }
     }
 }

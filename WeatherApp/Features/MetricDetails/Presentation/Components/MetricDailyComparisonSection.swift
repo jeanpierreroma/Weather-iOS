@@ -8,11 +8,29 @@
 import SwiftUI
 
 struct MetricDailyComparisonSection: View {
+    let todayPeak: Int
+    let yesterdayPeak: Int
+    let comparisonSentence: String
+
+    private var maxScale: Double {
+        Double(max(todayPeak, yesterdayPeak))
+    }
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(alignment: .leading) {
+            SectionTitle(text: "Daily Comparison")
+            SectionCard(comparisonSentence) {
+                LabeledBar(label: "Today", value: Double(todayPeak), maxValue: maxScale, highlight: true)
+                LabeledBar(label: "Yesterday", value: Double(yesterdayPeak), maxValue: maxScale)
+            }
+        }
     }
 }
 
 #Preview {
-    MetricDailyComparisonSection()
+    MetricDailyComparisonSection(
+        todayPeak: 77,
+        yesterdayPeak: 80,
+        comparisonSentence: "Today’s peak humidity is slightly higher than yesterday by 3% (77% vs 80%)."
+    )
 }

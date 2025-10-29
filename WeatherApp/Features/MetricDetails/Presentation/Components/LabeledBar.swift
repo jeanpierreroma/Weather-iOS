@@ -13,29 +13,55 @@ struct LabeledBar: View {
     let maxValue: Double
     var highlight: Bool = false
 
-    var progress: Double { maxValue > 0 ? min(max(value / maxValue, 0), 1) : 0 }
+    @ScaledMetric(relativeTo: .callout) private var barHeight: CGFloat = 22
+    @State private var labelWidth: CGFloat = 0
+    
+    private var progress: CGFloat {
+        guard maxValue > 0 else { return 0 }
+        return CGFloat((value / maxValue).clamped(to: 0...1))
+    }
 
     var body: some View {
-        HStack {
-            Text(label).font(.callout.weight(.semibold))
-            ZStack(alignment: .leading) {
-                Capsule().fill(.white.opacity(0.10))
-                GeometryReader { geo in
+        HStack(spacing: 8) {
+            GeometryReader { geo in
+                let barWidth = geo.size.width
+                let covered = highlight && barWidth * progress > (labelWidth + 10)
+
+                ZStack(alignment: .leading) {
                     Capsule()
                         .fill(.white)
-                        .frame(width: geo.size.width * progress)
+                        .frame(width: barWidth * progress, height: barHeight)
                         .opacity(highlight ? 1 : 0.45)
+                        .animation(.snappy(duration: 0.25, extraBounce: 0.01), value: progress)
+
+                    Text(label)
+                        .font(.callout.weight(.semibold))
+                        .foregroundStyle(covered ? Color.black : .primary)
+                        .padding(.horizontal, 10)
+                        .frame(height: barHeight, alignment: .leading)
+                        .background(
+                            GeometryReader { g in
+                                Color.clear
+                                    .onAppear { labelWidth = g.size.width }
+                                    .onChange(of: g.size) { _, newValue in
+                                        labelWidth = newValue.width
+                                    }
+                            }
+                        )
                 }
+                .frame(height: barHeight, alignment: .leading)
             }
-            .frame(height: 14)
-            .accessibilityLabel("\(label) \(Int(value))")
+            .frame(height: barHeight)
+            .frame(maxWidth: .infinity)
+
             Text("\(Int(value))")
                 .font(.callout.monospacedDigit().weight(.semibold))
-                .frame(minWidth: 26, alignment: .trailing)
+                .frame(minWidth: 32, alignment: .trailing)
         }
     }
 }
 
 #Preview {
-    LabeledBar(label: "Today", value: 1.0, maxValue: 11)
+    LabeledBar(label: "Today", value: 7.0, maxValue: 11)
+        .background(.ultraThinMaterial)
 }

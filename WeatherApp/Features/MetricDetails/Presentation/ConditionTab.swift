@@ -8,11 +8,12 @@
 import Foundation
 
 enum ConditionTab: String, CaseIterable, Identifiable {
-    case uvi, humidity, visibility, pressure
+    case conditions, uvi, humidity, visibility, pressure
     var id: Self { self }
 
     var title: String {
         switch self {
+        case .conditions: return "Conditions"
         case .uvi:        return "UVI"
         case .humidity:   return "Humidity"
         case .visibility: return "Visibility"
@@ -22,6 +23,7 @@ enum ConditionTab: String, CaseIterable, Identifiable {
 
     var icon: String {
         switch self {
+        case .conditions: return "cloud.fill"
         case .uvi:        return "sun.max"
         case .humidity:   return "drop"
         case .visibility: return "eye"

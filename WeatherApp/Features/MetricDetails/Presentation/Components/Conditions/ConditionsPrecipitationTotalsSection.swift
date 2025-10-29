@@ -20,6 +20,7 @@ struct ConditionsPrecipitationTotalsSection: View {
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Last 24 hours")
+                            .font(.footnote)
                         Text("Precipitation")
                     }
                     
@@ -39,6 +40,7 @@ struct ConditionsPrecipitationTotalsSection: View {
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Next 24 hours")
+                            .font(.footnote)
                         Text("Precipitation")
                     }
                     

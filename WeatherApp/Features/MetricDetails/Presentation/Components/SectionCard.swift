@@ -9,12 +9,10 @@ import SwiftUI
 
 struct SectionCard<Content: View>: View {
     let title: String?
-    let subtitle: String?
     @ViewBuilder var content: Content
 
-    init(_ title: String? = nil, subtitle: String? = nil, @ViewBuilder content: () -> Content) {
+    init(_ title: String? = nil, @ViewBuilder content: () -> Content) {
         self.title = title
-        self.subtitle = subtitle
         self.content = content()
     }
 
@@ -22,14 +20,17 @@ struct SectionCard<Content: View>: View {
         VStack(alignment: .leading, spacing: 12) {
             if let title {
                 Text(title).font(.headline)
-            }
-            if let subtitle {
-                Text(subtitle).font(.footnote).foregroundStyle(.secondary)
+                    .padding(.horizontal)
+                    
+                
+                Divider()
             }
             
             content
+                .padding(.horizontal)
+                
         }
-        .padding()
+        .padding(.vertical)
         .background(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .fill(.black.opacity(0.15))
@@ -49,7 +50,7 @@ struct SectionCard<Content: View>: View {
     }
     
     SectionCard(comparisonSentence) {
-        LabeledBar(label: "Today",     value: Double(todayPeak),     maxValue: 11, highlight: true)
-        LabeledBar(label: "Yesterday", value: Double(yesterdayPeak), maxValue: 11)
+        LabeledBar(label: "Today",     value: Double(todayPeak),     maxValue: 2, highlight: true)
+        LabeledBar(label: "Yesterday", value: Double(yesterdayPeak), maxValue: 2)
     }
 }

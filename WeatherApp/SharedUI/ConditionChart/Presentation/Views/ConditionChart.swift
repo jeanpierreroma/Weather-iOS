@@ -41,7 +41,7 @@ struct ConditionChart: View {
                 ForEach(edgeExtendedPoints) { p in
                     AreaMark(
                         x: .value("t", p.date),
-                        yStart: .value("y0", maskBaseline),
+                        yStart: .value("y0", yDomain.lowerBound + maskBaseline),
                         yEnd: .value("y1", p.value)
                     )
                     .interpolationMethod(.monotone)

@@ -36,13 +36,29 @@ struct UvTodaySection: View {
             
             Divider()
             
-            UvDailyComparisonSection(
+            MetricDailyComparisonSection(
                 todayPeak: todayPeak,
-                yesterdayPeak: yesterdayPeak
+                yesterdayPeak: yesterdayPeak,
+                comparisonSentence: comparisonSentence
             )
-            
-            UvAboutSection()
+                        
+            MetricAboutSection(
+                title: "About the UV Index",
+                text: """
+    The UV Index (UVI) indicates the strength of ultraviolet radiation from the sun. Higher values mean faster skin and eye damage. As a rule of thumb, start using shade, sunscreen, hats and protective clothing from level 3 (Moderate) and above.
+    """
+            )
         }
+    }
+    
+    private var comparisonSentence: String {
+        if todayPeak == yesterdayPeak {
+            return "The peak UV index today is the same as yesterday."
+        }
+        
+        return todayPeak < yesterdayPeak
+            ? "The peak UV index today is lower than yesterday."
+            : "The peak UV index today is higher than yesterday."
     }
 }
 

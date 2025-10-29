@@ -69,4 +69,50 @@ enum DemoData {
         return zip(hours, values).map { MetricPoint(date: $0.0, value: $0.1) }
     }
 
+    /// Температура, °C (мінімум перед світанком ~05:00, пік близько 15:00)
+    static func mockTemperatureDataCelsius() -> [MetricPoint] {
+        let cal   = Calendar.current
+        let start = cal.startOfDay(for: .now)
+        let hours = (0..<24).compactMap { cal.date(byAdding: .hour, value: $0, to: start) }
+
+        let values: [Double] = [
+            9.6, 9.2, 8.8, 8.5, 8.2, 8.0,
+            8.3, 9.1, 10.4, 12.1, 13.9, 15.3,
+            16.5, 17.3, 17.9, 18.0, 17.2, 16.0,
+            14.5, 13.1, 12.0, 11.1, 10.4, 9.9
+        ]
+
+        return zip(hours, values).map { MetricPoint(date: $0.0, value: $0.1) }
+    }
+    
+    static func mockPrecipitationProbabilityData() -> [MetricPoint] {
+        let cal   = Calendar.current
+        let start = cal.startOfDay(for: .now)
+        let hours = (0..<24).compactMap { cal.date(byAdding: .hour, value: $0, to: start) }
+
+        let values: [Double] = [
+             5,  5,  4,  4,  6, 10,
+            18, 28, 40, 52, 60, 68,
+            72, 65, 58, 50, 42, 35,
+            28, 20, 14, 10,  8,  6
+        ]
+
+        return zip(hours, values).map { MetricPoint(date: $0.0, value: $0.1) }
+    }
+    
+    /// Feels Like, °C (трохи нижча вночі через вітер, трохи вища опівдні через сонце)
+    static func mockFeelsLikeTemperatureDataCelsius() -> [MetricPoint] {
+        let cal   = Calendar.current
+        let start = cal.startOfDay(for: .now)
+        let hours = (0..<24).compactMap { cal.date(byAdding: .hour, value: $0, to: start) }
+
+        let values: [Double] = [
+             8.5,  8.1,  7.7,  7.3,  7.0,  6.8,
+             7.2,  8.1,  9.6, 11.6, 13.6, 15.8,
+            17.2, 18.0, 18.5, 18.3, 17.4, 15.8,
+            14.0, 12.6, 11.5, 10.6, 10.0,  9.4
+        ]
+
+        return zip(hours, values).map { MetricPoint(date: $0.0, value: $0.1) }
+    }
 }
