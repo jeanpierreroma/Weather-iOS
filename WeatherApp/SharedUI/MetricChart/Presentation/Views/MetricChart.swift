@@ -9,7 +9,7 @@
 import SwiftUI
 import Charts
 
-struct ConditionChart: View {
+struct MetricChart: View {
     @Environment(\.calendar) private var calendar
     
     enum TopAxisMode: Equatable {
@@ -218,7 +218,7 @@ struct ConditionChart: View {
     let bands: [ChartBand] = UVIBands.standard
     let yDomain: ClosedRange<Double> = 0...11
     
-    ConditionChart(
+    MetricChart(
         day: day,
         points: points,
         bands: bands,
