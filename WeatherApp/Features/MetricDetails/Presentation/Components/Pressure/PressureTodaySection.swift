@@ -15,16 +15,6 @@ struct PressureTodaySection: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            VStack(alignment: .leading, spacing: 4) {
-                (Text("\(currentValue) ").font(.title2.weight(.semibold)).monospacedDigit()
-                 + Text("hPa").font(.headline))
-                .foregroundStyle(.primary)
-                
-                Text("Rising")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-            
             ConditionChart(day: date, points: points, bands: PressureBands.standard, yDomain: 930...1100, topAxisMode: .averageByBucket(hours: 6), yGridStep: 15)
                 .padding(.trailing)
                 .padding(.top, 8)

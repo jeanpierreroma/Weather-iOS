@@ -17,16 +17,6 @@ struct HumidityTodaySection: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            VStack(alignment: .leading, spacing: 4) {
-                (Text("\(currentValue) ").font(.title2.weight(.semibold)).monospacedDigit()
-                 + Text("%").font(.headline))
-                    .foregroundStyle(.primary)
-
-                Text("Dew point is 23°")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-
             ConditionChart(day: date, points: points, bands: HumidityBands.standard, yDomain: 0...100, topAxisMode: .averageByBucket(hours: 6), yGridStep: 20)
                 .padding(.trailing)
                 .padding(.top, 8)

@@ -18,14 +18,10 @@ enum MoonPresenter {
             ?? "\(Int(details.illuminationPercent.rounded()))%"
 
         let timeFormatter = TimeFormatters.shortTime(calendar: calendar, locale: locale)
-        let moonsetText: String
-        if let moonset = details.moonset {
-            moonsetText = timeFormatter.string(from: moonset)
-        } else {
-            moonsetText = Self.placeholder(locale: locale)
-        }
+        let moonsetText = timeFormatter.string(from: details.moodSet)
+        let moonriseText = timeFormatter.string(from: details.moodRise)
 
-        let nextFullMoonText = Self.nextFullMoonText(days: details.daysUntilFullMoon, locale: locale)
+        let nextFullMoonText = Self.nextFullMoonText(days: details.nextFullMoonDays, locale: locale)
 
         return WaxingCrescentProps(
             title: Self.displayName(for: details.phaseName, locale: locale),
@@ -33,7 +29,7 @@ enum MoonPresenter {
             illuminationText: illuminationText,
             moonsetText: moonsetText,
             nextFullMoonText: nextFullMoonText,
-            currentMoonPicture: Self.moonImageURL(for: details.phaseFraction)
+            currentMoonPicture: URL(string: details.moonUrl)!
         )
     }
 }
@@ -66,18 +62,6 @@ private extension MoonPresenter {
 
         let key = phaseName.lowercased()
         return lookup[key] ?? "moon"
-    }
-
-    static func moonImageURL(for fraction: Double) -> URL {
-        // NASA SVS: https://svs.gsfc.nasa.gov/5415#media_group_419784
-        let base = 7153
-        let upper = 7176
-        let clampedFraction = fraction.clamped(to: 0...1)
-        let steps = upper - base
-        let index = Int((Double(steps) * clampedFraction).rounded())
-        let imageNumber = min(base + index, upper)
-        let urlString = String(format: "https://svs.gsfc.nasa.gov/vis/a000000/a005400/a005416/frames/730x730_1x1_30p/moon.7473.jpg", imageNumber)
-        return URL(string: urlString)!
     }
 
     static func nextFullMoonText(days: Int?, locale: Locale) -> String {

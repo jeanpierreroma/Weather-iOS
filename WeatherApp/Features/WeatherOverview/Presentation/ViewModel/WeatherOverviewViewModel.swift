@@ -55,10 +55,12 @@ final class WeatherOverviewViewModel {
             pressureDetails: .init(pressureHpa: 1024, summary: ""),
             moonDetails: .init(
                 phaseName: "Waxing Crescent",
+                moonUrl: "https://svs.gsfc.nasa.gov/vis/a000000/a005400/a005416/frames/730x730_1x1_30p/moon.7473.jpg",
                 illuminationPercent: 8,
-                phaseFraction: 0.22,
-                moonset: Calendar.current.date(bySettingHour: 18, minute: 17, second: 0, of: .now)!,
-                daysUntilFullMoon: 12
+                moodSet: Calendar.current.date(bySettingHour: 18, minute: 17, second: 0, of: .now)!,
+                moodRise: Calendar.current.date(bySettingHour: 18, minute: 17, second: 0, of: .now)!,
+                nextFullMoonDays: 12,
+                distance: 111_111
             )
         )
     }

@@ -17,16 +17,6 @@ struct UvTodaySection: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            VStack(alignment: .leading, spacing: 4) {
-                (Text("\(currentValue) ").font(.title2.weight(.semibold)).monospacedDigit()
-                 + Text("High").font(.headline))
-                    .foregroundStyle(.primary)
-
-                Text("WHO UV Index (UVI)")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-
             ConditionChart(day: date, points: points, bands: UVIBands.standard, yDomain: 0...11, topAxisMode: .perHour)
                 .padding(.trailing)
                 .padding(.top, 8)

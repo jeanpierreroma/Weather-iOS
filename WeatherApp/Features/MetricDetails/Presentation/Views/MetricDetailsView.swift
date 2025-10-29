@@ -25,29 +25,65 @@ struct MetricDetailsView: View {
                 
                 Divider()
                 
-                Menu {
-                    Picker("Condition", selection: $tab) {
-                        ForEach(ConditionTab.allCases) { t in
-                            Label(t.title, systemImage: t.icon).tag(t)
+                HStack {
+                    // Header
+                    Group {
+                        switch tab {
+                        case .uvi:
+                            MetricHeader(
+                                value: uviProps.currentValue,
+                                unit: "Low",
+                                description: "WHO UV Index (UVI)"
+                            )
+                        case .humidity:
+                            MetricHeader(
+                                value: humidityProps.currentValue,
+                                unit: "%",
+                                description: "Dew point is 23°"
+                            )
+                        case .pressure:
+                            MetricHeader(
+                                value: uviProps.currentValue,
+                                unit: "hPa",
+                                description: "Rising"
+                            )
+                        case .visibility:
+                            MetricHeader(
+                                value: pressureProps.currentValue,
+                                unit: "km",
+                                description: "Perfectly clear"
+                            )
                         }
                     }
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: tab.icon)
-                        Image(systemName: "chevron.down")
+                    
+                    Spacer()
+                    
+                    Menu {
+                        Picker("Condition", selection: $tab) {
+                            ForEach(ConditionTab.allCases) { t in
+                                Label(t.title, systemImage: t.icon).tag(t)
+                            }
+                        }
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: tab.icon)
+                            Image(systemName: "chevron.down")
+                        }
+                        .font(.callout.weight(.semibold))
+                        .foregroundStyle(.black)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 12)
+                        .background(.thinMaterial, in: Capsule())
+                        .overlay(
+                            Capsule()
+                                .stroke(.white.opacity(0.15), lineWidth: 1)
+                        )
+                        .contentShape(.capsule)
                     }
-                    .font(.callout.weight(.semibold))
-                    .foregroundStyle(.black)
-                    .padding(.vertical, 8)
-                    .padding(.horizontal, 12)
-                    .background(.thinMaterial, in: Capsule())
-                    .overlay(
-                        Capsule()
-                            .stroke(.white.opacity(0.15), lineWidth: 1)
-                    )
-                    .contentShape(.capsule)
                 }
                 .padding(.horizontal)
+                .transition(.identity)
+                .animation(nil, value: tab)
                 
                 Group {
                     switch tab {

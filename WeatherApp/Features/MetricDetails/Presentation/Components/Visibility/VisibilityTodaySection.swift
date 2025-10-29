@@ -17,16 +17,6 @@ struct VisibilityTodaySection: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            VStack(alignment: .leading, spacing: 4) {
-                (Text("\(currentValue) ").font(.title2.weight(.semibold)).monospacedDigit()
-                 + Text("km").font(.headline))
-                    .foregroundStyle(.primary)
-
-                Text("Perfectly clear")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-
             ConditionChart(day: date, points: points, bands: VisibilityBands.standard, yDomain: 0...50, topAxisMode: .averageByBucket(hours: 2), yGridStep: 5)
                 .padding(.trailing)
                 .padding(.top, 8)
