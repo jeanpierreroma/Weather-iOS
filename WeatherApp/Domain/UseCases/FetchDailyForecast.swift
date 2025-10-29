@@ -101,15 +101,21 @@ enum DailyForecastMapper {
 
         // Moon
         let moonset = parseOptionalMoonTime(
-            dto.moonDetailsDto.moonsetText,
+            dto.moonDetailsDto.moonSet,
+            now: now, calendar: calendar, timeZone: timeZone, locale: locale
+        )
+        let moonrise = parseOptionalMoonTime(
+            dto.moonDetailsDto.moonRise,
             now: now, calendar: calendar, timeZone: timeZone, locale: locale
         )
         let moon = MoonDetails(
             phaseName: dto.moonDetailsDto.phaseName,
+            moonUrl: dto.moonDetailsDto.moonUrl,
             illuminationPercent: dto.moonDetailsDto.illuminationPercent,
-            phaseFraction: dto.moonDetailsDto.phaseFraction.clamped(to: 0...1),
-            moonset: moonset,
-            daysUntilFullMoon: dto.moonDetailsDto.daysUntilFullMoon
+            moodSet: moonset ?? Date(),
+            moodRise: moonrise ?? Date(),
+            nextFullMoonDays: dto.moonDetailsDto.nextFullMoonDays ?? -1,
+            distance: dto.moonDetailsDto.distance
         )
 
         return WeatherDetails(

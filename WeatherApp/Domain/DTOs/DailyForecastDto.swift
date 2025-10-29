@@ -98,8 +98,10 @@ struct WindDetailsDto: Sendable, Decodable {
 
 struct MoonDetailsDto: Sendable, Decodable {
     let phaseName: String
+    let moonUrl: String
     let illuminationPercent: Double
-    let phaseFraction: Double
-    let moonsetText: String?
-    let daysUntilFullMoon: Int?
+    let moonSet: String
+    let moonRise: String
+    let nextFullMoonDays: Int?
+    let distance: Double
 }
